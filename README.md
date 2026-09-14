@@ -9,8 +9,6 @@
 
 A comprehensive guide to understanding, detecting, and preventing cybersecurity threats and vulnerabilities. This repository contains detailed documentation, detection scripts, and prevention strategies for various security threats.
 
-## 🌐 Live Web App
-Browse this guide interactively at [cybersecurity-threats-guide-app.vercel.app](https://your-app.vercel.app)
 
 ## 📋 Table of Contents
 
@@ -260,7 +258,7 @@ cybersecurity-threats-guide/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Bd-Mutant7/cybersecurity-threats-guide.git
+git clone https://github.com/s4ntrx/cybersecurity-threats-guide.git
 cd cybersecurity-threats-guide
 ```
 2. Install required dependencies:
@@ -316,11 +314,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - The author is not responsible for any misuse of this information
 - Some scripts may trigger security alerts - use only in controlled environments
 
-## 📞 Contact
-
-- GitHub: [@Bd-Mutant7](https://github.com/Bd-Mutant7)
-- Create an issue for questions or suggestions
-
-## ⭐ Support
-
-If you find this repository helpful, please give it a star! It helps others discover this resource.
