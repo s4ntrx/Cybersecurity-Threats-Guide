@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /tools
+    schedule:
+      interval: weekly
+  - package-ecosystem: pip
+    directory: /api
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /cybersec-app
+    schedule:
+      interval: weekly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
