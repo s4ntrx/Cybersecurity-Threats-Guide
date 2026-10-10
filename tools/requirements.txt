@@ -38,7 +38,7 @@ sqlalchemy==2.0.22
 
 # Machine Learning (for advanced detection)
 scikit-learn==1.3.2
-pandas==2.1.3
+pandas==3.0.6
 numpy==1.24.3
 
 # Development
