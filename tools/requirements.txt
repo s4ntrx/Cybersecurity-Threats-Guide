@@ -21,7 +21,7 @@ hashlib==8.0.2
 
 # Forensics
 volatility3==2.5.0
-dfvfs==20230925
+dfvfs==20260924
 pytsk3==20260715
 
 # Utilities
