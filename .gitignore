@@ -1,1 +1,9 @@
-
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.db
+*.log
+node_modules/
+.next/
+out/
