@@ -25,13 +25,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 ### Adding New Threats or Vulnerabilities
 
 1. Create a new folder under the appropriate category
-2. Include a comprehensive README.md with:
-   - Description of the threat
-   - How it works
-   - Detection methods
-   - Prevention strategies
-   - Real-world examples
-   - References
+2. Copy [TOPIC_TEMPLATE.md](TOPIC_TEMPLATE.md) to the new folder as `README.md` and fill in every section, including the standards mapping and the "Last reviewed" date.
 
 3. Add detection scripts with:
    - Clear comments
@@ -99,7 +93,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 - Test your code in a safe, isolated environment
 - Include test cases where applicable
-- Ensure compatibility with Python 3.8+
+- Ensure compatibility with Python 3.10+
 
 ## License
 

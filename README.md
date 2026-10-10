@@ -42,6 +42,7 @@ cybersecurity-threats-guide/
 ├── README.md
 ├── LICENSE
 ├── CONTRIBUTING.md
+├── TOPIC_TEMPLATE.md
 │
 ├── 01-network-security/
 │   ├── ddos-attacks/
@@ -229,6 +230,8 @@ source .venv/bin/activate
 pip install -r tools/requirements.txt
 ```
 
+Some scripts also need system software: `tshark` (Wireshark) for `traffic_analyzer.py` and a running Redis server for `rate_limiting.py`. Registry checks in the ransomware detector only run on Windows.
+
 3. Optional: memory forensics support (installs Volatility 3):
 
 ```bash
@@ -281,11 +284,12 @@ Gaps between earlier README promises and the repository today:
 - Social engineering: baiting, tailgating
 - Cryptography: asymmetric encryption (RSA), digital signatures, key management, a README for the encryption section
 - Incident response: post-incident analysis, a README for containment
+- Apply the [topic template](TOPIC_TEMPLATE.md) (standards mapping and review date) to every existing topic; SQL injection is done
 - Root-level helper scripts and a `resources/` folder of links, books, and certifications
 
 ## Contributing
 
-Contributions are welcome. Read the [Contributing Guidelines](CONTRIBUTING.md) first, then:
+Contributions are welcome. Read the [Contributing Guidelines](CONTRIBUTING.md) first, and start new topics from [TOPIC_TEMPLATE.md](TOPIC_TEMPLATE.md). Then:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/your-feature`)
