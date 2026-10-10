@@ -346,7 +346,7 @@ export default function HomePage() {
           flexWrap: 'wrap', gap: '12px',
         }}>
           <div style={{ color: '#4a7a8a', fontSize: '0.65rem' }}>
-            MIT License · <a href="https://github.com/Bd-Mutant7/Cybersecurity-Threats-Guide" target="_blank" rel="noopener noreferrer" style={{ color: '#00e5ff', textDecoration: 'none' }}>github.com/Bd-Mutant7/Cybersecurity-Threats-Guide</a>
+            MIT License · <a href="https://github.com/s4ntrx/Cybersecurity-Threats-Guide" target="_blank" rel="noopener noreferrer" style={{ color: '#00e5ff', textDecoration: 'none' }}>github.com/s4ntrx/Cybersecurity-Threats-Guide</a>
           </div>
           <div style={{ color: '#4a7a8a', fontSize: '0.65rem' }}>
             BUILD 2.1.0 · EDUCATIONAL USE ONLY

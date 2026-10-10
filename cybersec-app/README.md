@@ -1,6 +1,6 @@
 # Cybersecurity Threats Guide — Web App
 
-A Next.js web application for the [Cybersecurity-Threats-Guide](https://github.com/Bd-Mutant7/Cybersecurity-Threats-Guide) repository, deployable to Vercel.
+A Next.js web application for the [Cybersecurity-Threats-Guide](https://github.com/s4ntrx/Cybersecurity-Threats-Guide) repository, deployable to Vercel.
 
 ## Tech Stack
 - **Next.js 14** (App Router, Static Export)

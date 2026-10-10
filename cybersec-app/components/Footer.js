@@ -30,7 +30,7 @@ export default function Footer() {
           color: 'var(--text-muted)',
         }}>
           <a
-            href="https://github.com/Bd-Mutant7/Cybersecurity-Threats-Guide/blob/main/CONTRIBUTING.md"
+            href="https://github.com/s4ntrx/Cybersecurity-Threats-Guide/blob/main/CONTRIBUTING.md"
             target="_blank"
             rel="noopener noreferrer"
             style={{ transition: 'color 0.2s' }}
@@ -40,7 +40,7 @@ export default function Footer() {
             Contributing
           </a>
           <a
-            href="https://github.com/Bd-Mutant7/Cybersecurity-Threats-Guide"
+            href="https://github.com/s4ntrx/Cybersecurity-Threats-Guide"
             target="_blank"
             rel="noopener noreferrer"
             style={{ transition: 'color 0.2s' }}

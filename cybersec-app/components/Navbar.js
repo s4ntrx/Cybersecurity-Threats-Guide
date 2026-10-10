@@ -81,7 +81,7 @@ export default function Navbar() {
         }}>{time}</span>
 
         <a
-          href="https://github.com/Bd-Mutant7/Cybersecurity-Threats-Guide"
+          href="https://github.com/s4ntrx/Cybersecurity-Threats-Guide"
           target="_blank"
           rel="noopener noreferrer"
           style={{
