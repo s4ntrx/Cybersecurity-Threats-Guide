@@ -38,226 +38,120 @@ This is an early-stage guide. Six categories exist, and most topics have documen
 ## Repository structure
 
 ```mermaid
-flowchart TB
-    ROOT["cybersecurity-threats-guide/"]
-
-    ROOT --> DOCS
-    ROOT --> NETWORK
-    ROOT --> WEBSEC
-    ROOT --> MALWARE
-    ROOT --> SOCIAL
-    ROOT --> CRYPTO
-    ROOT --> INCIDENT
-    ROOT --> APPLICATIONS
-    ROOT --> TOOLING
-
-    subgraph DOCS["Project Documentation"]
-        direction TB
-        README["README.md"]
-        LICENSE["LICENSE"]
-        CONTRIBUTING["CONTRIBUTING.md"]
-        TEMPLATE["TOPIC_TEMPLATE.md"]
-    end
-
-    subgraph NETWORK["01 - Network Security"]
-        direction TB
-
-        subgraph DDOS["DDoS Attacks"]
-            direction LR
-            DDOS_DET["Detection"]
-            DDOS_PREV["Prevention"]
-            DDOS_DET --> DDOS1["ddos_detection.py"]
-            DDOS_DET --> DDOS2["traffic_analyzer.py"]
-            DDOS_PREV --> DDOS3["firewall_rules.txt"]
-            DDOS_PREV --> DDOS4["rate_limiting.py"]
-            DDOS_README["README.md"]
-        end
-
-        subgraph MITM["Man-in-the-Middle"]
-            direction LR
-            MITM_DET["Detection"]
-            MITM_PREV["Prevention"]
-            MITM_DET --> MITM1["arp_spoof_detector.py"]
-            MITM_DET --> MITM2["ssl_strip_detector.py"]
-            MITM_PREV --> MITM3["certificate_pinning.py"]
-            MITM_PREV --> MITM4["ssl_tls_config.py"]
-            MITM_README["README.md"]
-        end
-
-        subgraph PORTSCAN["Port Scanning"]
-            direction LR
-            PORT_DET["Detection"]
-            PORT_PREV["Prevention"]
-            PORT_DET --> PORT1["ids_rules.txt"]
-            PORT_DET --> PORT2["port_scan_detector.py"]
-            PORT_PREV --> PORT3["firewall_config.py"]
-            PORT_PREV --> PORT4["stealth_mode.py"]
-            PORT_README["README.md"]
-        end
-
-        NETWORK_README["README.md"]
-    end
-
-    subgraph WEBSEC["02 - Web Application Security"]
-        direction TB
-
-        subgraph SQL["SQL Injection"]
-            direction LR
-            SQL_DET["Detection"]
-            SQL_PREV["Prevention"]
-            SQL_DET --> SQL1["sql_injection_detector.py"]
-            SQL_DET --> SQL2["sql_injection_scanner.py"]
-            SQL_PREV --> SQL3["input_validation.py"]
-            SQL_PREV --> SQL4["parameterized_queries.py"]
-            SQL_README["README.md"]
-        end
-
-        subgraph XSS["XSS Attacks"]
-            direction LR
-            XSS_DET["Detection"]
-            XSS_DET --> XSS1["xss_detector.py"]
-            XSS_README["README.md"]
-        end
-
-        WEBSEC_README["README.md"]
-    end
-
-    subgraph MALWARE["03 - Malware Analysis"]
-        direction TB
-
-        subgraph RANSOM["Ransomware"]
-            direction LR
-            RANSOM_DET["Detection"]
-            RANSOM_PREV["Prevention"]
-            RANSOM_DET --> RANSOM1["file_monitor.py"]
-            RANSOM_DET --> RANSOM2["ransomware_behavior.py"]
-            RANSOM_PREV --> RANSOM3["app_whitelisting.py"]
-            RANSOM_PREV --> RANSOM4["backup_system.py"]
-            RANSOM_README["README.md"]
-        end
-
-        subgraph ROOTKITS["Rootkits"]
-            direction LR
-            ROOTKIT_DET["Detection"]
-            ROOTKIT_PREV["Prevention"]
-            ROOTKIT_DET --> ROOTKIT1["integrity_checker.py"]
-            ROOTKIT_DET --> ROOTKIT2["rootkit_detector.py"]
-            ROOTKIT_PREV --> ROOTKIT3["kernel_patching.py"]
-            ROOTKIT_PREV --> ROOTKIT4["secure_boot.py"]
-            ROOTKIT_README["README.md"]
-        end
-
-        subgraph TROJANS["Trojans"]
-            direction LR
-            TROJAN_DET["Detection"]
-            TROJAN_PREV["Prevention"]
-            TROJAN_DET --> TROJAN1["process_analyzer.py"]
-            TROJAN_DET --> TROJAN2["trojan_scanner.py"]
-            TROJAN_PREV --> TROJAN3["av_config.py"]
-            TROJAN_PREV --> TROJAN4["sandbox_setup.py"]
-            TROJAN_README["README.md"]
-        end
-
-        MALWARE_README["README.md"]
-    end
-
-    subgraph SOCIAL["04 - Social Engineering"]
-        direction TB
-
-        subgraph PHISHING["Phishing"]
-            direction LR
-            PHISH_DET["Detection"]
-            PHISH_PREV["Prevention"]
-            PHISH_DET --> PHISH1["email_analyzer.py"]
-            PHISH_DET --> PHISH2["phishing_detector.py"]
-            PHISH_PREV --> PHISH3["email_filters.py"]
-            PHISH_PREV --> PHISH4["training_materials.md"]
-            PHISH_README["README.md"]
-        end
-
-        subgraph PRETEXTING["Pretexting"]
-            direction LR
-            PRETEXT_DET["Detection"]
-            PRETEXT_PREV["Prevention"]
-            PRETEXT_DET --> PRETEXT1["social_engineering_detector.py"]
-            PRETEXT_PREV --> PRETEXT2["security_policy.md"]
-            PRETEXT_README["README.md"]
-        end
-
-        SOCIAL_README["README.md"]
-    end
-
-    subgraph CRYPTO["05 - Cryptography"]
-        direction TB
-
-        subgraph ENCRYPTION["Encryption"]
-            direction LR
-            SYMMETRIC["Symmetric Encryption"]
-            SYMMETRIC --> AES["aes_example.py"]
-        end
-
-        subgraph HASHING["Hashing"]
-            direction LR
-            HASH_README["README.md"]
-            HASH1["integrity_checker.py"]
-            HASH2["password_hashing.py"]
-        end
-
-        CRYPTO_README["README.md"]
-    end
-
-    subgraph INCIDENT["06 - Incident Response"]
-        direction TB
-
-        subgraph CONTAINMENT["Containment"]
-            direction LR
-            CONTAIN1["backup_recovery.py"]
-            CONTAIN2["isolation_script.py"]
-        end
-
-        subgraph FORENSICS["Forensics"]
-            direction LR
-            FORENSICS_README["README.md"]
-            FORENSICS1["disk_forensics.py"]
-            FORENSICS2["memory_analyzer.py"]
-        end
-
-        INCIDENT_README["README.md"]
-    end
-
-    subgraph APPLICATIONS["Applications"]
-        direction TB
-        API["api/"]
-        API_DESC["Flask API - Experimental"]
-        API --> API_DESC
-
-        NEXTJS["cybersec-app/"]
-        NEXTJS_DESC["Next.js Website"]
-        NEXTJS_README["README.md"]
-        NEXTJS --> NEXTJS_DESC
-        NEXTJS --> NEXTJS_README
-    end
-
-    subgraph TOOLING["Development Tools"]
-        direction TB
-        SETUP["setup_tools.sh"]
-        REQUIREMENTS["requirements.txt"]
-        OPTIONAL["requirements-optional.txt"]
-    end
-
-    classDef rootStyle fill:#15365C,color:#FFFFFF,stroke:#0B1F38,stroke-width:3px
-    classDef sectionStyle fill:#D9EAF7,color:#15365C,stroke:#4682B4,stroke-width:2px
-    classDef topicStyle fill:#E2F0D9,color:#215E21,stroke:#70AD47,stroke-width:1px
-    classDef moduleStyle fill:#FFF2CC,color:#7F6000,stroke:#D6B656,stroke-width:1px
-    classDef fileStyle fill:#FFFFFF,color:#333333,stroke:#999999,stroke-width:1px
-    classDef supportStyle fill:#E4DFEC,color:#403152,stroke:#8064A2,stroke-width:2px
-
-    class ROOT rootStyle
-    class DOCS,NETWORK,WEBSEC,MALWARE,SOCIAL,CRYPTO,INCIDENT,APPLICATIONS,TOOLING sectionStyle
-    class DDOS,MITM,PORTSCAN,SQL,XSS,RANSOM,ROOTKITS,TROJANS,PHISHING,PRETEXTING,ENCRYPTION,HASHING,CONTAINMENT,FORENSICS topicStyle
-    class DDOS_DET,DDOS_PREV,MITM_DET,MITM_PREV,PORT_DET,PORT_PREV,SQL_DET,SQL_PREV,XSS_DET,RANSOM_DET,RANSOM_PREV,ROOTKIT_DET,ROOTKIT_PREV,TROJAN_DET,TROJAN_PREV,PHISH_DET,PHISH_PREV,PRETEXT_DET,PRETEXT_PREV,SYMMETRIC moduleStyle
-    class README,LICENSE,CONTRIBUTING,TEMPLATE,DDOS1,DDOS2,DDOS3,DDOS4,DDOS_README,MITM1,MITM2,MITM3,MITM4,MITM_README,PORT1,PORT2,PORT3,PORT4,PORT_README,NETWORK_README,SQL1,SQL2,SQL3,SQL4,SQL_README,XSS1,XSS_README,WEBSEC_README,RANSOM1,RANSOM2,RANSOM3,RANSOM4,RANSOM_README,ROOTKIT1,ROOTKIT2,ROOTKIT3,ROOTKIT4,ROOTKIT_README,TROJAN1,TROJAN2,TROJAN3,TROJAN4,TROJAN_README,MALWARE_README,PHISH1,PHISH2,PHISH3,PHISH4,PHISH_README,PRETEXT1,PRETEXT2,PRETEXT_README,SOCIAL_README,AES,HASH_README,HASH1,HASH2,CRYPTO_README,CONTAIN1,CONTAIN2,FORENSICS_README,FORENSICS1,FORENSICS2,INCIDENT_README,API_DESC,NEXTJS_DESC,NEXTJS_README,SETUP,REQUIREMENTS,OPTIONAL fileStyle
-    class API,NEXTJS supportStyle
+mindmap
+  root((Cybersecurity Threats Guide))
+    Project Documentation
+      README.md
+      LICENSE
+      CONTRIBUTING.md
+      TOPIC_TEMPLATE.md
+    01 Network Security
+      DDoS Attacks
+        Detection
+          ddos_detection.py
+          traffic_analyzer.py
+        Prevention
+          firewall_rules.txt
+          rate_limiting.py
+        README.md
+      Man-in-the-Middle
+        Detection
+          arp_spoof_detector.py
+          ssl_strip_detector.py
+        Prevention
+          certificate_pinning.py
+          ssl_tls_config.py
+        README.md
+      Port Scanning
+        Detection
+          ids_rules.txt
+          port_scan_detector.py
+        Prevention
+          firewall_config.py
+          stealth_mode.py
+        README.md
+    02 Web Application Security
+      SQL Injection
+        Detection
+          sql_injection_detector.py
+          sql_injection_scanner.py
+        Prevention
+          input_validation.py
+          parameterized_queries.py
+        README.md
+      XSS Attacks
+        Detection
+          xss_detector.py
+        README.md
+    03 Malware Analysis
+      Ransomware
+        Detection
+          file_monitor.py
+          ransomware_behavior.py
+        Prevention
+          app_whitelisting.py
+          backup_system.py
+        README.md
+      Rootkits
+        Detection
+          integrity_checker.py
+          rootkit_detector.py
+        Prevention
+          kernel_patching.py
+          secure_boot.py
+        README.md
+      Trojans
+        Detection
+          process_analyzer.py
+          trojan_scanner.py
+        Prevention
+          av_config.py
+          sandbox_setup.py
+        README.md
+    04 Social Engineering
+      Phishing
+        Detection
+          email_analyzer.py
+          phishing_detector.py
+        Prevention
+          email_filters.py
+          training_materials.md
+        README.md
+      Pretexting
+        Detection
+          social_engineering_detector.py
+        Prevention
+          security_policy.md
+        README.md
+    05 Cryptography
+      Encryption
+        Symmetric Encryption
+          aes_example.py
+      Hashing
+        README.md
+        integrity_checker.py
+        password_hashing.py
+      README.md
+    06 Incident Response
+      Containment
+        backup_recovery.py
+        isolation_script.py
+      Forensics
+        README.md
+        disk_forensics.py
+        memory_analyzer.py
+      README.md
+    Applications
+      api
+        Flask API
+        Experimental
+      cybersec-app
+        Next.js Website
+        README.md
+    Development Tools
+      setup_tools.sh
+      requirements.txt
+      requirements-optional.txt
 ```
 
 ## Categories
