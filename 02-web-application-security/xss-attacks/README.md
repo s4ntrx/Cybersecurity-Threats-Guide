@@ -30,7 +30,7 @@ Cross-Site Scripting (XSS) is a client-side code injection attack where attacker
 
 ### Automated Detection
 - [XSS Detector](./detection/xss_detector.py) - Automated XSS scanning
-- [CSP Analyzer](./detection/csp_analyzer.py) - Content Security Policy analysis
+- CSP Analyzer - Content Security Policy analysis *(planned)*
 
 ## 🛡️ Prevention Strategies
 
@@ -42,7 +42,7 @@ Cross-Site Scripting (XSS) is a client-side code injection attack where attacker
 
 ### Prevention Examples
 - [Output Encoding](./prevention/output_encoding.py) - Context-aware encoding
-- [CSP Headers](./prevention/csp_headers.py) - Content Security Policy implementation
+- CSP Headers - Content Security Policy implementation *(planned)*
 
 ## 📊 Attack Flow
 ```mermaid

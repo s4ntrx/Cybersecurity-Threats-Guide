@@ -22,7 +22,18 @@ class SecureDatabaseQueries:
         self.db_type = db_type
         self.db_name = db_name
         self.connection = None
-        
+
+    @staticmethod
+    def hash_password(password):
+        """Salted scrypt hash. Plain SHA-256 is too fast to protect passwords."""
+        salt = os.urandom(16)
+        digest = hashlib.scrypt(password.encode(), salt=salt, n=2**14, r=8, p=1)
+        return f"scrypt${salt.hex()}${digest.hex()}"
+
+    def _q(self, query):
+        """Translate %s placeholders to ? for SQLite, which does not accept %s."""
+        return query.replace('%s', '?') if self.db_type == 'sqlite' else query
+
     def connect(self):
         """Establish database connection based on type"""
         try:
@@ -108,16 +119,16 @@ class SecureDatabaseQueries:
             cursor = self.connection.cursor()
             
             # Hash the password (never store plain text passwords!)
-            password_hash = hashlib.sha256(password.encode()).hexdigest()
+            password_hash = self.hash_password(password)
             
             # SECURE: Using parameterized query with placeholders
             if self.db_type in ['sqlite', 'mysql']:
                 query = "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)"
-                cursor.execute(query, (username, email, password_hash))
+                cursor.execute(self._q(query), (username, email, password_hash))
             elif self.db_type == 'postgresql':
                 # PostgreSQL uses %s placeholders
                 query = "INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)"
-                cursor.execute(query, (username, email, password_hash))
+                cursor.execute(self._q(query), (username, email, password_hash))
             
             self.connection.commit()
             print(f"[✓] User '{username}' added successfully (ID: {cursor.lastrowid if hasattr(cursor, 'lastrowid') else 'N/A'})")
@@ -138,7 +149,7 @@ class SecureDatabaseQueries:
             # SECURE: Parameterized query
             if self.db_type in ['sqlite', 'mysql', 'postgresql']:
                 query = "SELECT id, username, email, created_at FROM users WHERE username = %s"
-                cursor.execute(query, (username,))
+                cursor.execute(self._q(query), (username,))
             
             result = cursor.fetchone()
             
@@ -165,7 +176,7 @@ class SecureDatabaseQueries:
             search_pattern = f"%{search_term}%"
             
             query = "SELECT id, username, email FROM users WHERE username LIKE %s OR email LIKE %s"
-            cursor.execute(query, (search_pattern, search_pattern))
+            cursor.execute(self._q(query), (search_pattern, search_pattern))
             
             results = cursor.fetchall()
             
@@ -188,7 +199,7 @@ class SecureDatabaseQueries:
             
             # SECURE: Parameterized query
             query = "UPDATE users SET email = %s WHERE id = %s"
-            cursor.execute(query, (new_email, user_id))
+            cursor.execute(self._q(query), (new_email, user_id))
             
             self.connection.commit()
             
@@ -213,7 +224,7 @@ class SecureDatabaseQueries:
             
             # SECURE: Parameterized query
             query = "DELETE FROM users WHERE id = %s"
-            cursor.execute(query, (user_id,))
+            cursor.execute(self._q(query), (user_id,))
             
             self.connection.commit()
             
