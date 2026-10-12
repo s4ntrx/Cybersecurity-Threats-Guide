@@ -37,185 +37,132 @@ This is an early-stage guide. Six categories exist, and most topics have documen
 
 ## Repository structure
 
-```
-cybersecurity-threats-guide/
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── TOPIC_TEMPLATE.md
-│
-├── 01-network-security/
-│   ├── ddos-attacks/
-│   │   ├── detection/
-│   │   │   ├── ddos_detection.py
-│   │   │   └── traffic_analyzer.py
-│   │   ├── prevention/
-│   │   │   ├── firewall_rules.txt
-│   │   │   └── rate_limiting.py
-│   │   └── README.md
-│   ├── dns-spoofing/
-│   │   ├── detection/
-│   │   │   └── dns_spoof_detector.py
-│   │   ├── prevention/
-│   │   │   └── dnssec_check.py
-│   │   └── README.md
-│   ├── man-in-the-middle/
-│   │   ├── detection/
-│   │   │   ├── arp_spoof_detector.py
-│   │   │   └── ssl_strip_detector.py
-│   │   ├── prevention/
-│   │   │   ├── certificate_pinning.py
-│   │   │   └── ssl_tls_config.py
-│   │   └── README.md
-│   ├── port-scanning/
-│   │   ├── detection/
-│   │   │   ├── ids_rules.txt
-│   │   │   ├── port_scan_detector.py
-│   │   │   └── scan_alerts.json
-│   │   ├── prevention/
-│   │   │   ├── firewall_config.py
-│   │   │   └── stealth_mode.py
-│   │   └── README.md
-│   └── README.md
-│
-├── 02-web-application-security/
-│   ├── csrf/
-│   │   ├── detection/
-│   │   │   └── csrf_detector.py
-│   │   ├── prevention/
-│   │   │   └── csrf_protection.py
-│   │   └── README.md
-│   ├── file-inclusion/
-│   │   ├── detection/
-│   │   │   └── lfi_detector.py
-│   │   ├── prevention/
-│   │   │   └── safe_file_access.py
-│   │   └── README.md
-│   ├── security-misconfig/
-│   │   ├── detection/
-│   │   │   └── security_headers_checker.py
-│   │   └── README.md
-│   ├── session-hijacking/
-│   │   ├── detection/
-│   │   │   └── session_security_checker.py
-│   │   ├── prevention/
-│   │   │   └── secure_session.py
-│   │   └── README.md
-│   ├── sql-injection/
-│   │   ├── detection/
-│   │   │   ├── sql_injection_detector.py
-│   │   │   └── sql_injection_scanner.py
-│   │   ├── prevention/
-│   │   │   ├── input_validation.py
-│   │   │   └── parameterized_queries.py
-│   │   └── README.md
-│   ├── xss-attacks/
-│   │   ├── detection/
-│   │   │   └── xss_detector.py
-│   │   ├── prevention/
-│   │   │   ├── csp_analyzer.py
-│   │   │   └── output_encoding.py
-│   │   └── README.md
-│   └── README.md
-│
-├── 03-malware-analysis/
-│   ├── keyloggers/
-│   │   ├── detection/
-│   │   │   └── keylogger_detector.py
-│   │   └── README.md
-│   ├── ransomware/
-│   │   ├── detection/
-│   │   │   ├── file_monitor.py
-│   │   │   └── ransomware_behavior.py
-│   │   ├── prevention/
-│   │   │   ├── app_whitelisting.py
-│   │   │   └── backup_system.py
-│   │   └── README.md
-│   ├── rootkits/
-│   │   ├── detection/
-│   │   │   ├── integrity_checker.py
-│   │   │   ├── rootkit_detector.log
-│   │   │   └── rootkit_detector.py
-│   │   ├── prevention/
-│   │   │   ├── kernel_patching.py
-│   │   │   └── secure_boot.py
-│   │   └── README.md
-│   ├── trojans/
-│   │   ├── detection/
-│   │   │   ├── process_analyzer.py
-│   │   │   └── trojan_scanner.py
-│   │   ├── prevention/
-│   │   │   ├── av_config.py
-│   │   │   └── sandbox_setup.py
-│   │   └── README.md
-│   └── README.md
-│
-├── 04-social-engineering/
-│   ├── baiting/
-│   │   ├── detection/
-│   │   │   └── usb_bait_scanner.py
-│   │   └── README.md
-│   ├── phishing/
-│   │   ├── detection/
-│   │   │   ├── email_analyzer.py
-│   │   │   └── phishing_detector.py
-│   │   ├── prevention/
-│   │   │   ├── email_filters.py
-│   │   │   └── training_materials.md
-│   │   └── README.md
-│   ├── pretexting/
-│   │   ├── detection/
-│   │   │   └── social_engineering_detector.py
-│   │   ├── prevention/
-│   │   │   └── security_policy.md
-│   │   └── README.md
-│   ├── tailgating/
-│   │   ├── detection/
-│   │   │   ├── sample_access_log.csv
-│   │   │   └── tailgating_log_analyzer.py
-│   │   └── README.md
-│   └── README.md
-│
-├── 05-cryptography/
-│   ├── digital-signatures/
-│   │   ├── README.md
-│   │   └── file_signer.py
-│   ├── encryption/
-│   │   ├── asymmetric/
-│   │   │   ├── README.md
-│   │   │   └── rsa_example.py
-│   │   └── symmetric/
-│   │       └── aes_example.py
-│   ├── hashing/
-│   │   ├── README.md
-│   │   ├── integrity_checker.py
-│   │   └── password_hashing.py
-│   ├── key-management/
-│   │   ├── README.md
-│   │   └── key_manager.py
-│   └── README.md
-│
-├── 06-incident-response/
-│   ├── containment/
-│   │   ├── backup_recovery.py
-│   │   └── isolation_script.py
-│   ├── forensics/
-│   │   ├── README.md
-│   │   ├── disk_forensics.py
-│   │   └── memory_analyzer.py
-│   ├── post-incident/
-│   │   ├── README.md
-│   │   ├── post_incident_report.py
-│   │   └── sample_incident.json
-│   └── README.md
-│
-├── tests/               # pytest suite for the scripts
-├── api/                 # Flask API (experimental, see "Web app and API")
-├── cybersec-app/        # Next.js site (see cybersec-app/README.md)
-└── tools/
-    ├── requirements-optional.txt
-    ├── requirements.txt
-    └── setup_tools.sh
+```mermaid
+flowchart TD
+    ROOT["cybersecurity-threats-guide/"]
+
+    ROOT --> DOCS["Documentation"]
+    ROOT --> NET["01 - Network Security"]
+    ROOT --> WEB["02 - Web Application Security"]
+    ROOT --> MAL["03 - Malware Analysis"]
+    ROOT --> SOC["04 - Social Engineering"]
+    ROOT --> CRYPTO["05 - Cryptography"]
+    ROOT --> IR["06 - Incident Response"]
+    ROOT --> API["Flask API (Experimental)"]
+    ROOT --> APP["Next.js Site"]
+    ROOT --> TOOLS["Tools"]
+
+    DOCS --> README["README.md"]
+    DOCS --> LICENSE["LICENSE"]
+    DOCS --> CONTRIB["CONTRIBUTING.md"]
+    DOCS --> TEMPLATE["TOPIC_TEMPLATE.md"]
+
+    NET --> DDOS["DDoS Attacks"]
+    NET --> MITM["Man-in-the-Middle"]
+    NET --> PORT["Port Scanning"]
+
+    DDOS --> DD["Detection"]
+    DDOS --> DP["Prevention"]
+    DD --> DD1["ddos_detection.py"]
+    DD --> DD2["traffic_analyzer.py"]
+    DP --> DP1["firewall_rules.txt"]
+    DP --> DP2["rate_limiting.py"]
+
+    MITM --> MD["Detection"]
+    MITM --> MP["Prevention"]
+    MD --> MD1["arp_spoof_detector.py"]
+    MD --> MD2["ssl_strip_detector.py"]
+    MP --> MP1["certificate_pinning.py"]
+    MP --> MP2["ssl_tls_config.py"]
+
+    PORT --> PD["Detection"]
+    PORT --> PP["Prevention"]
+    PD --> PD1["ids_rules.txt"]
+    PD --> PD2["port_scan_detector.py"]
+    PP --> PP1["firewall_config.py"]
+    PP --> PP2["stealth_mode.py"]
+
+    WEB --> SQL["SQL Injection"]
+    WEB --> XSS["XSS Attacks"]
+    SQL --> SD["Detection"]
+    SQL --> SP["Prevention"]
+    SD --> SD1["sql_injection_detector.py"]
+    SD --> SD2["sql_injection_scanner.py"]
+    SP --> SP1["input_validation.py"]
+    SP --> SP2["parameterized_queries.py"]
+    XSS --> XD["Detection"]
+    XD --> XD1["xss_detector.py"]
+
+    MAL --> RANSOM["Ransomware"]
+    MAL --> ROOTKIT["Rootkits"]
+    MAL --> TROJAN["Trojans"]
+
+    RANSOM --> RD["Detection"]
+    RANSOM --> RP["Prevention"]
+    RD --> RD1["file_monitor.py"]
+    RD --> RD2["ransomware_behavior.py"]
+    RP --> RP1["app_whitelisting.py"]
+    RP --> RP2["backup_system.py"]
+
+    ROOTKIT --> RKD["Detection"]
+    ROOTKIT --> RKP["Prevention"]
+    RKD --> RKD1["integrity_checker.py"]
+    RKD --> RKD2["rootkit_detector.py"]
+    RKP --> RKP1["kernel_patching.py"]
+    RKP --> RKP2["secure_boot.py"]
+
+    TROJAN --> TD["Detection"]
+    TROJAN --> TP["Prevention"]
+    TD --> TD1["process_analyzer.py"]
+    TD --> TD2["trojan_scanner.py"]
+    TP --> TP1["av_config.py"]
+    TP --> TP2["sandbox_setup.py"]
+
+    SOC --> PHISH["Phishing"]
+    SOC --> PRETEXT["Pretexting"]
+    PHISH --> PHD["Detection"]
+    PHISH --> PHP["Prevention"]
+    PHD --> PHD1["email_analyzer.py"]
+    PHD --> PHD2["phishing_detector.py"]
+    PHP --> PHP1["email_filters.py"]
+    PHP --> PHP2["training_materials.md"]
+    PRETEXT --> PTD["Detection"]
+    PRETEXT --> PTP["Prevention"]
+    PTD --> PTD1["social_engineering_detector.py"]
+    PTP --> PTP1["security_policy.md"]
+
+    CRYPTO --> ENC["Encryption"]
+    CRYPTO --> HASH["Hashing"]
+    ENC --> SYM["Symmetric Encryption"]
+    SYM --> AES["aes_example.py"]
+    HASH --> HASH1["integrity_checker.py"]
+    HASH --> HASH2["password_hashing.py"]
+
+    IR --> CONT["Containment"]
+    IR --> FORENSICS["Forensics"]
+    CONT --> CONT1["backup_recovery.py"]
+    CONT --> CONT2["isolation_script.py"]
+    FORENSICS --> FOR1["disk_forensics.py"]
+    FORENSICS --> FOR2["memory_analyzer.py"]
+
+    API --> APINOTE["Experimental API"]
+    APP --> APPNOTE["cybersec-app/README.md"]
+    TOOLS --> T1["setup_tools.sh"]
+    TOOLS --> T2["requirements.txt"]
+    TOOLS --> T3["requirements-optional.txt"]
+
+    classDef root fill:#17365D,color:#FFFFFF,stroke:#0B1F38,stroke-width:2px
+    classDef domain fill:#D9EAF7,color:#17365D,stroke:#4682B4,stroke-width:1px
+    classDef topic fill:#E2F0D9,color:#24511A,stroke:#70AD47
+    classDef module fill:#FFF2CC,color:#7F6000,stroke:#D6B656
+    classDef support fill:#E4DFEC,color:#403152,stroke:#8064A2
+
+    class ROOT root
+    class NET,WEB,MAL,SOC,CRYPTO,IR domain
+    class DDOS,MITM,PORT,SQL,XSS,RANSOM,ROOTKIT,TROJAN,PHISH,PRETEXT,ENC,HASH,CONT,FORENSICS topic
+    class DD,DP,MD,MP,PD,PP,SD,SP,XD,RD,RP,RKD,RKP,TD,TP,PHD,PHP,PTD,PTP,SYM module
+    class DOCS,API,APP,TOOLS support
+
 ```
 
 ## Categories
