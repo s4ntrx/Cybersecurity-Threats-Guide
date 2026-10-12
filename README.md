@@ -53,6 +53,12 @@ cybersecurity-threats-guide/
 │   │   │   ├── firewall_rules.txt
 │   │   │   └── rate_limiting.py
 │   │   └── README.md
+│   ├── dns-spoofing/
+│   │   ├── detection/
+│   │   │   └── dns_spoof_detector.py
+│   │   ├── prevention/
+│   │   │   └── dnssec_check.py
+│   │   └── README.md
 │   ├── man-in-the-middle/
 │   │   ├── detection/
 │   │   │   ├── arp_spoof_detector.py
@@ -64,7 +70,8 @@ cybersecurity-threats-guide/
 │   ├── port-scanning/
 │   │   ├── detection/
 │   │   │   ├── ids_rules.txt
-│   │   │   └── port_scan_detector.py
+│   │   │   ├── port_scan_detector.py
+│   │   │   └── scan_alerts.json
 │   │   ├── prevention/
 │   │   │   ├── firewall_config.py
 │   │   │   └── stealth_mode.py
@@ -72,6 +79,28 @@ cybersecurity-threats-guide/
 │   └── README.md
 │
 ├── 02-web-application-security/
+│   ├── csrf/
+│   │   ├── detection/
+│   │   │   └── csrf_detector.py
+│   │   ├── prevention/
+│   │   │   └── csrf_protection.py
+│   │   └── README.md
+│   ├── file-inclusion/
+│   │   ├── detection/
+│   │   │   └── lfi_detector.py
+│   │   ├── prevention/
+│   │   │   └── safe_file_access.py
+│   │   └── README.md
+│   ├── security-misconfig/
+│   │   ├── detection/
+│   │   │   └── security_headers_checker.py
+│   │   └── README.md
+│   ├── session-hijacking/
+│   │   ├── detection/
+│   │   │   └── session_security_checker.py
+│   │   ├── prevention/
+│   │   │   └── secure_session.py
+│   │   └── README.md
 │   ├── sql-injection/
 │   │   ├── detection/
 │   │   │   ├── sql_injection_detector.py
@@ -83,10 +112,17 @@ cybersecurity-threats-guide/
 │   ├── xss-attacks/
 │   │   ├── detection/
 │   │   │   └── xss_detector.py
+│   │   ├── prevention/
+│   │   │   ├── csp_analyzer.py
+│   │   │   └── output_encoding.py
 │   │   └── README.md
 │   └── README.md
 │
 ├── 03-malware-analysis/
+│   ├── keyloggers/
+│   │   ├── detection/
+│   │   │   └── keylogger_detector.py
+│   │   └── README.md
 │   ├── ransomware/
 │   │   ├── detection/
 │   │   │   ├── file_monitor.py
@@ -98,6 +134,7 @@ cybersecurity-threats-guide/
 │   ├── rootkits/
 │   │   ├── detection/
 │   │   │   ├── integrity_checker.py
+│   │   │   ├── rootkit_detector.log
 │   │   │   └── rootkit_detector.py
 │   │   ├── prevention/
 │   │   │   ├── kernel_patching.py
@@ -114,6 +151,10 @@ cybersecurity-threats-guide/
 │   └── README.md
 │
 ├── 04-social-engineering/
+│   ├── baiting/
+│   │   ├── detection/
+│   │   │   └── usb_bait_scanner.py
+│   │   └── README.md
 │   ├── phishing/
 │   │   ├── detection/
 │   │   │   ├── email_analyzer.py
@@ -128,16 +169,30 @@ cybersecurity-threats-guide/
 │   │   ├── prevention/
 │   │   │   └── security_policy.md
 │   │   └── README.md
+│   ├── tailgating/
+│   │   ├── detection/
+│   │   │   ├── sample_access_log.csv
+│   │   │   └── tailgating_log_analyzer.py
+│   │   └── README.md
 │   └── README.md
 │
 ├── 05-cryptography/
+│   ├── digital-signatures/
+│   │   ├── README.md
+│   │   └── file_signer.py
 │   ├── encryption/
+│   │   ├── asymmetric/
+│   │   │   ├── README.md
+│   │   │   └── rsa_example.py
 │   │   └── symmetric/
 │   │       └── aes_example.py
 │   ├── hashing/
 │   │   ├── README.md
 │   │   ├── integrity_checker.py
 │   │   └── password_hashing.py
+│   ├── key-management/
+│   │   ├── README.md
+│   │   └── key_manager.py
 │   └── README.md
 │
 ├── 06-incident-response/
@@ -148,14 +203,19 @@ cybersecurity-threats-guide/
 │   │   ├── README.md
 │   │   ├── disk_forensics.py
 │   │   └── memory_analyzer.py
+│   ├── post-incident/
+│   │   ├── README.md
+│   │   ├── post_incident_report.py
+│   │   └── sample_incident.json
 │   └── README.md
 │
+├── tests/               # pytest suite for the scripts
 ├── api/                 # Flask API (experimental, see "Web app and API")
 ├── cybersec-app/        # Next.js site (see cybersec-app/README.md)
 └── tools/
-    ├── setup_tools.sh
+    ├── requirements-optional.txt
     ├── requirements.txt
-    └── requirements-optional.txt
+    └── setup_tools.sh
 ```
 
 ## Categories
@@ -167,42 +227,44 @@ Topics marked *planned* do not have content yet.
 - [DDoS Attacks](01-network-security/ddos-attacks/README.md)
 - [Man-in-the-Middle](01-network-security/man-in-the-middle/README.md)
 - [Port Scanning](01-network-security/port-scanning/README.md)
-- DNS Spoofing *(planned)*
+- [DNS Spoofing](01-network-security/dns-spoofing/README.md)
 
 ### 2. [Web Application Security](02-web-application-security/README.md)
 
 - [SQL Injection](02-web-application-security/sql-injection/README.md)
-- [Cross-Site Scripting (XSS)](02-web-application-security/xss-attacks/README.md), detection only
-- Cross-Site Request Forgery (CSRF) *(planned)*
-- Session Hijacking *(planned)*
+- [Cross-Site Scripting (XSS)](02-web-application-security/xss-attacks/README.md)
+- [Cross-Site Request Forgery (CSRF)](02-web-application-security/csrf/README.md)
+- [Session Hijacking](02-web-application-security/session-hijacking/README.md)
+- [File Inclusion and Path Traversal](02-web-application-security/file-inclusion/README.md)
+- [Security Misconfiguration](02-web-application-security/security-misconfig/README.md)
 
 ### 3. [Malware Analysis](03-malware-analysis/README.md)
 
 - [Ransomware](03-malware-analysis/ransomware/README.md)
 - [Trojans](03-malware-analysis/trojans/README.md)
 - [Rootkits](03-malware-analysis/rootkits/README.md)
-- Keyloggers *(planned)*
+- [Keyloggers](03-malware-analysis/keyloggers/README.md) (detection only)
 
 ### 4. [Social Engineering](04-social-engineering/README.md)
 
 - [Phishing](04-social-engineering/phishing/README.md)
 - [Pretexting](04-social-engineering/pretexting/README.md)
-- Baiting *(planned)*
-- Tailgating *(planned)*
+- [Baiting](04-social-engineering/baiting/README.md)
+- [Tailgating](04-social-engineering/tailgating/README.md)
 
 ### 5. [Cryptography](05-cryptography/README.md)
 
-- Symmetric encryption (AES example)
+- Symmetric encryption (hybrid AES example)
+- [Asymmetric encryption (RSA)](05-cryptography/encryption/asymmetric/README.md)
 - [Hashing and password hashing](05-cryptography/hashing/README.md)
-- Asymmetric encryption *(planned)*
-- Digital signatures *(planned)*
-- Key management *(planned)*
+- [Digital signatures](05-cryptography/digital-signatures/README.md)
+- [Key management](05-cryptography/key-management/README.md)
 
 ### 6. [Incident Response](06-incident-response/README.md)
 
 - [Digital forensics](06-incident-response/forensics/README.md)
 - Containment and recovery scripts
-- Post-incident analysis *(planned)*
+- [Post-incident analysis](06-incident-response/post-incident/README.md)
 
 ## Getting started
 
@@ -276,16 +338,14 @@ user = db.get_user_secure("alice")
 
 ## Roadmap
 
-Gaps between earlier README promises and the repository today:
+Remaining gaps:
 
-- Web: CSRF (docs, detection, prevention), session hijacking, XSS prevention and CSP analysis, SQL injection WAF rules
-- Network: DNS spoofing
-- Malware: keyloggers
-- Social engineering: baiting, tailgating
-- Cryptography: asymmetric encryption (RSA), digital signatures, key management, a README for the encryption section
-- Incident response: post-incident analysis, a README for containment
-- Apply the [topic template](TOPIC_TEMPLATE.md) (standards mapping and review date) to every existing topic; SQL injection is done
-- Root-level helper scripts and a `resources/` folder of links, books, and certifications
+- New topics were added in October 2026 and are marked Draft: their references still need an independent review, and several "Real-world example" sections need a primary source added
+- Apply the [topic template](TOPIC_TEMPLATE.md) (standards mapping and review date) to the older topics: ransomware, trojans, rootkits, phishing, pretexting, DDoS, MITM, port scanning, forensics
+- SQL injection WAF rules; a README for the containment scripts and for symmetric encryption
+- Topics listed as planned in the category pages: ARP poisoning page, worms, botnets, quid pro quo, vishing, smishing
+- A `resources/` folder of links, books, and certifications
+- Test the scripts that change system state (firewall, isolation, sandbox, kernel hardening, secure boot, antivirus configuration) in a disposable virtual machine; they have only been reviewed by reading the code
 
 ## Contributing
 
