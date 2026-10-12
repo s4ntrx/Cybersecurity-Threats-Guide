@@ -7,7 +7,7 @@ import argparse
 import getpass
 from datetime import datetime
 import bcrypt
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 
@@ -77,7 +77,7 @@ class PasswordHasher:
         password_bytes = password.encode('utf-8')
         
         # Create KDF
-        kdf = PBKDF2(
+        kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,
@@ -106,7 +106,7 @@ class PasswordHasher:
             password_bytes = password.encode('utf-8')
             
             # Recompute hash
-            kdf = PBKDF2(
+            kdf = PBKDF2HMAC(
                 algorithm=hashes.SHA256(),
                 length=32,
                 salt=salt,

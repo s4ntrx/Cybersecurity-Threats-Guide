@@ -96,7 +96,7 @@ class IntegrityChecker:
         Returns:
             Dictionary with manifest data
         """
-        directory = Path(directory)
+        directory = Path(directory).resolve()    # absolute paths so verify works from any directory
         if not directory.exists():
             print(f"[!] Directory not found: {directory}")
             return None
@@ -143,6 +143,8 @@ class IntegrityChecker:
         with open(filename, 'r') as f:
             return json.load(f)
     
+    ignored_files = set()   # paths (such as the manifest itself) that are not reported as 'new'
+
     def verify_manifest(self, manifest, check_missing=True, check_modified=True):
         """
         Verify files against manifest
@@ -189,7 +191,7 @@ class IntegrityChecker:
                 for f in files:
                     all_files.add(os.path.join(root, f))
             
-            results['new'] = list(all_files - manifest_files)
+            results['new'] = sorted(all_files - manifest_files - self.ignored_files)
         
         return results
     
@@ -290,7 +292,9 @@ def main():
     parser = argparse.ArgumentParser(description='File Integrity Checker')
     parser.add_argument('action', choices=['create', 'verify', 'check', 'duplicates'],
                        help='Action to perform')
-    parser.add_argument('target', help='Target file or directory')
+    parser.add_argument('target', nargs='?', default=None,
+                       help='Target file or directory (verify: omit, or give a directory, to check the whole manifest)')
+    parser.add_argument('--hash', dest='expected_hash', help='Expected hash for the check action')
     parser.add_argument('-m', '--manifest', help='Manifest file')
     parser.add_argument('-a', '--algorithm', default='sha256',
                        choices=['md5', 'sha1', 'sha256', 'sha512'],
@@ -315,27 +319,41 @@ def main():
             return
         
         manifest = checker.load_manifest(args.manifest)
+        checker.ignored_files = {os.path.abspath(args.manifest)}
         
-        if args.target:
+        target = os.path.abspath(args.target) if args.target else None
+        if target and os.path.isfile(target):
             # Verify single file
-            if args.target in manifest['files']:
-                checker.verify_file(args.target, manifest['files'][args.target])
+            if target in manifest['files']:
+                if not checker.verify_file(target, manifest['files'][target]):
+                    sys.exit(1)
             else:
-                print(f"[!] File not found in manifest: {args.target}")
+                print(f"[!] File not found in manifest: {target}")
+                sys.exit(2)
         else:
             # Verify entire manifest
             results = checker.verify_manifest(manifest)
             report = checker.generate_report(results)
             print(report)
+            problems = results['modified'] or results['missing'] or results['new']
             
             if args.output:
                 with open(args.output, 'w') as f:
                     f.write(report)
+            if problems:
+                sys.exit(1)
     
     elif args.action == 'check':
         # Check single file against provided hash
-        expected = input("Enter expected hash: ").strip()
-        checker.verify_file(args.target, expected)
+        expected = args.expected_hash
+        if not expected:
+            try:
+                expected = input("Enter expected hash: ").strip()
+            except EOFError:
+                print("[!] Provide the expected hash with --hash")
+                sys.exit(2)
+        if not checker.verify_file(args.target, expected):
+            sys.exit(1)
     
     elif args.action == 'duplicates':
         duplicates = checker.find_duplicates(args.target, args.recursive)

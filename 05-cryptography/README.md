@@ -7,11 +7,11 @@ Cryptography is the practice and study of techniques for secure communication in
 
 ## 📋 Categories Covered
 
-1. [Symmetric Encryption](./encryption/symmetric/README.md) - Same key for encryption/decryption
+1. Symmetric Encryption - Same key for encryption/decryption *(planned)*
 2. [Asymmetric Encryption](./encryption/asymmetric/README.md) - Public/private key pairs
 3. [Hashing Functions](./hashing/README.md) - One-way cryptographic hashes
-4. [Digital Signatures](./encryption/README.md) - Message authentication and non-repudiation
-5. [Key Management](./encryption/README.md) - Generation, storage, and rotation
+4. [Digital Signatures](./digital-signatures/README.md) - Message authentication and non-repudiation
+5. [Key Management](./key-management/README.md) - Generation, storage, and rotation
 
 ## 🛡️ Cryptographic Primitives
 
