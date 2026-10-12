@@ -132,7 +132,7 @@ server {
     
     def iis_secure_config(self):
         """Generate secure IIS SSL configuration (PowerShell)"""
-        config = """
+        config = r"""
 # PowerShell script for IIS SSL configuration
 
 # Import IIS module

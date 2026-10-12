@@ -226,6 +226,8 @@ def main():
     parser.add_argument('-t', '--threshold', type=int, default=1000, help='Packets per second threshold')
     parser.add_argument('-w', '--window', type=int, default=10, help='Analysis window in seconds')
     parser.add_argument('-l', '--log', default='ddos_alerts.log', help='Log file path')
+    parser.add_argument('--yes', action='store_true',
+                        help='Skip the permission prompt (you confirm you may monitor this network)')
     
     args = parser.parse_args()
     
@@ -237,7 +239,11 @@ def main():
     """)
     
     # Check permission
-    response = input("[?] Do you have permission to monitor this network? (yes/no): ")
+    try:
+        response = 'yes' if args.yes else input("[?] Do you have permission to monitor this network? (yes/no): ")
+    except EOFError:
+        print("\n[!] No interactive input available. Re-run with --yes if you are authorized.")
+        return
     if response.lower() != 'yes':
         print("[!] Exiting. Only monitor networks you own or have permission to test.")
         return

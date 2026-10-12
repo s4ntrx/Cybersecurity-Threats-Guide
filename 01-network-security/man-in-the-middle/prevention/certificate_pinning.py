@@ -14,12 +14,15 @@ import json
 import requests
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa, ec
 import argparse
 import os
 from datetime import datetime
 import sys
+from colorama import Fore, Style, init
+
+init(autoreset=True)
 
 class CertificatePinner:
     """

@@ -105,25 +105,23 @@ class ARPSpoofDetector:
             print(f"{Fore.YELLOW}[!] Error getting network info: {e}{Style.RESET_ALL}")
     
     def get_arp_table(self):
-        """Get current ARP table"""
+        """Get the current ARP table as {ip: mac}. Uses /proc/net/arp on Linux, `arp -an` elsewhere."""
         arp_table = {}
         try:
-            # Use 'arp -n' for numeric output
-            result = subprocess.run(['arp', '-n'], capture_output=True, text=True)
-            
-            # Parse arp output
-            lines = result.stdout.strip().split('\n')[1:]  # Skip header
-            for line in lines:
-                parts = line.split()
-                if len(parts) >= 3:
-                    ip = parts[0]
-                    mac = parts[2] if len(parts) > 2 else None
-                    if mac and mac != '(incomplete)':
-                        arp_table[ip] = mac.lower()
-                        
-        except Exception as e:
+            if os.path.exists('/proc/net/arp'):
+                with open('/proc/net/arp') as handle:
+                    next(handle, None)                       # header
+                    for line in handle:
+                        parts = line.split()
+                        if len(parts) >= 4 and parts[2] != '0x0' and parts[3] != '00:00:00:00:00:00':
+                            arp_table[parts[0]] = parts[3].lower()
+            else:
+                output = subprocess.run(['arp', '-an'], capture_output=True, text=True).stdout
+                for ip, mac in re.findall(r'\(([\d.]+)\) at ([0-9a-fA-F:]{11,17})', output):
+                    arp_table[ip] = mac.lower().replace('-', ':')
+        except (OSError, subprocess.SubprocessError) as e:
             print(f"{Fore.YELLOW}[!] Error getting ARP table: {e}{Style.RESET_ALL}")
-        
+
         return arp_table
     
     def check_arp_table_changes(self):
@@ -225,7 +223,7 @@ class ARPSpoofDetector:
         # Check if this is a known attacker
         if new_mac in self.suspicious_ips:
             alert_msg += " (Known attacker MAC)"
-            self.block_attacker(ip, new_mac)
+            self.restore_known_good(ip, old_mac)
         
         self.trigger_alert("ARP_SPOOF", alert_msg, {
             'ip': ip,
@@ -237,35 +235,28 @@ class ARPSpoofDetector:
         # Add to suspicious set
         self.suspicious_ips.add(new_mac)
     
-    def block_attacker(self, ip, mac):
-        """Block attacker IP/MAC (requires root)"""
-        if ip not in self.blocked_ips:
-            try:
-                # Add iptables rule to block IP
-                subprocess.run(['iptables', '-A', 'INPUT', '-s', ip, '-j', 'DROP'], 
-                             check=True)
-                self.blocked_ips.add(ip)
-                print(f"{Fore.RED}[!] Blocked attacker IP: {ip}{Style.RESET_ALL}")
-                
-                # Optional: Add ARP table entry to prevent poisoning
-                subprocess.run(['arp', '-s', ip, mac], check=True)
-                
-            except Exception as e:
-                print(f"{Fore.YELLOW}[!] Error blocking attacker: {e}{Style.RESET_ALL}")
-    
-    def get_mac_by_ip(self, ip):
-        """Get MAC address for IP from ARP table"""
+    auto_respond = False
+
+    def restore_known_good(self, ip, good_mac):
+        """Pin the LAST KNOWN-GOOD MAC for `ip` as a static ARP entry (opt-in, needs root).
+
+        The earlier version ran `arp -s <ip> <new_mac>` and `iptables -A INPUT -s <ip> -j DROP`.
+        Here <ip> is the address being impersonated (often the gateway) and <new_mac> is the
+        attacker, so that pinned the poisoned mapping permanently and cut off the real host.
+        """
+        if not self.auto_respond or ip in self.blocked_ips:
+            return
         try:
-            result = subprocess.run(['arp', '-n', ip], capture_output=True, text=True)
-            lines = result.stdout.strip().split('\n')
-            if len(lines) > 1:
-                parts = lines[1].split()
-                if len(parts) >= 3:
-                    return parts[2].lower()
-        except:
-            pass
-        return None
-    
+            subprocess.run(['arp', '-s', ip, good_mac], check=True)
+            self.blocked_ips.add(ip)
+            print(f"{Fore.RED}[!] Pinned {ip} -> {good_mac} (last known good){Style.RESET_ALL}")
+        except (OSError, subprocess.SubprocessError) as e:
+            print(f"{Fore.YELLOW}[!] Could not pin ARP entry: {e}{Style.RESET_ALL}")
+
+    def get_mac_by_ip(self, ip):
+        """Get MAC address for an IP from the ARP table."""
+        return self.get_arp_table().get(ip)
+
     def trigger_alert(self, alert_type, message, data=None):
         """Trigger security alert"""
         self.stats['alerts_triggered'] += 1
@@ -359,6 +350,8 @@ def main():
     parser.add_argument('-c', '--check-interval', type=int, default=5,
                        help='Seconds between ARP table checks')
     parser.add_argument('-l', '--log', default='arp_alerts.log', help='Log file')
+    parser.add_argument('--auto-respond', action='store_true',
+                        help='Pin the last known-good MAC as a static ARP entry on detection (needs root)')
     
     args = parser.parse_args()
     
@@ -379,6 +372,7 @@ def main():
     global detector
     detector = ARPSpoofDetector(args.interface, args.check_interval, 
                                 args.threshold, args.log)
+    detector.auto_respond = args.auto_respond
     
     # Set signal handler
     signal.signal(signal.SIGINT, signal_handler)

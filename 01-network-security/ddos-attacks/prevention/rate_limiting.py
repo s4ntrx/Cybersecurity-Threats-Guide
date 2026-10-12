@@ -14,6 +14,7 @@ import logging
 from datetime import datetime, timedelta
 import redis
 import hashlib
+import re
 
 class RateLimiter:
     """Base class for rate limiters"""
@@ -180,6 +181,7 @@ class WebApplicationFirewall:
         
         self.blocked_ips = set()
         self.request_log = []
+        self.counters = {'allowed': 0, 'blocked': 0}
         self.setup_logging()
         
     def setup_logging(self):
@@ -209,18 +211,26 @@ class WebApplicationFirewall:
     
     def is_malicious(self, request):
         """Check for malicious patterns"""
-        # Check for SQL injection patterns
-        sql_patterns = ["'", "OR 1=1", "UNION SELECT", "DROP TABLE"]
-        for pattern in sql_patterns:
-            if pattern in str(request):
-                return True, f"SQL injection pattern: {pattern}"
-        
-        # Check for XSS patterns
-        xss_patterns = ["<script", "javascript:", "onerror="]
-        for pattern in xss_patterns:
-            if pattern in str(request):
-                return True, f"XSS pattern: {pattern}"
-        
+        # Inspect the VALUES of the request. (str(request) of a dict always contains
+        # apostrophes, so the old check flagged every request as SQL injection.)
+        values = ' '.join(str(v) for v in request.values())
+
+        sql_patterns = {
+            'quote followed by OR/AND': r"'\s*(or|and)\s+\S",
+            'OR 1=1': r"\bor\s+1\s*=\s*1\b",
+            'UNION SELECT': r"\bunion\s+(all\s+)?select\b",
+            'DROP TABLE': r"\bdrop\s+table\b",
+            'comment terminator': r"'\s*(--|#|/\*)",
+        }
+        for label, pattern in sql_patterns.items():
+            if re.search(pattern, values, re.IGNORECASE):
+                return True, f"SQL injection pattern: {label}"
+
+        xss_patterns = {'<script': r"<\s*script", 'javascript:': r"javascript\s*:", 'onerror=': r"onerror\s*="}
+        for label, pattern in xss_patterns.items():
+            if re.search(pattern, values, re.IGNORECASE):
+                return True, f"XSS pattern: {label}"
+
         return False, "Clean"
     
     def process_request(self, request):
@@ -230,6 +240,7 @@ class WebApplicationFirewall:
         # Check if IP is blocked
         if client_ip in self.blocked_ips:
             self.logger.warning(f"Blocked request from {client_ip} (IP blocked)")
+            self.counters['blocked'] += 1
             return False, "IP is blocked"
         
         # Check for malicious content
@@ -237,6 +248,7 @@ class WebApplicationFirewall:
         if is_malicious:
             self.logger.error(f"Malicious request from {client_ip}: {reason}")
             self.blocked_ips.add(client_ip)
+            self.counters['blocked'] += 1
             return False, f"Malicious request detected: {reason}"
         
         # Apply rate limiting
@@ -250,10 +262,12 @@ class WebApplicationFirewall:
         for allowed, message in limits:
             if not allowed:
                 self.logger.warning(f"Rate limit: {message} for {client_ip}")
+                self.counters['blocked'] += 1
                 return False, message
         
         # Request allowed
         self.logger.info(f"Request allowed from {client_ip}")
+        self.counters['allowed'] += 1
         self.request_log.append({
             'timestamp': datetime.now().isoformat(),
             'ip': client_ip,
@@ -266,7 +280,9 @@ class WebApplicationFirewall:
     def get_stats(self):
         """Get WAF statistics"""
         return {
-            'total_requests': len(self.request_log),
+            'total_requests': self.counters['allowed'] + self.counters['blocked'],
+            'allowed_requests': self.counters['allowed'],
+            'blocked_requests': self.counters['blocked'],
             'blocked_ips': len(self.blocked_ips),
             'active_rate_limiters': {
                 'ip': len(self.rate_limiters['ip'].buckets),

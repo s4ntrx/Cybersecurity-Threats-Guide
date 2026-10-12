@@ -12,6 +12,9 @@ import argparse
 import os
 import sys
 import subprocess
+import hashlib
+import hmac
+import ipaddress
 from collections import defaultdict, deque
 from datetime import datetime, timedelta
 import json
@@ -133,16 +136,23 @@ class PortKnockingServer:
         # Add iptables rule to allow access
         self.add_iptables_rule(client_ip)
     
+    def _iptables(self, flag, ip, check=False, quiet=False):
+        """Run an iptables allow-rule change WITHOUT a shell. The address is validated first, so a
+        crafted value can never be interpreted as extra shell commands (the old code interpolated
+        it into a shell=True command line)."""
+        ip = str(ipaddress.ip_address(ip))
+        return subprocess.run(
+            ['iptables', f'-{flag}', 'INPUT', '-s', ip, '-p', 'tcp', '--dport', str(self.target_port), '-j', 'ACCEPT'],
+            check=check, stderr=subprocess.DEVNULL if quiet else None)
+
     def add_iptables_rule(self, client_ip):
         """Add iptables rule to allow access"""
         try:
             # Remove old rule if exists
-            subprocess.run(f"iptables -D INPUT -s {client_ip} -p tcp --dport {self.target_port} -j ACCEPT", 
-                         shell=True, stderr=subprocess.DEVNULL)
+            self._iptables('D', client_ip, quiet=True)
             
             # Add new rule
-            subprocess.run(f"iptables -I INPUT -s {client_ip} -p tcp --dport {self.target_port} -j ACCEPT", 
-                         shell=True, check=True)
+            self._iptables('I', client_ip, check=True)
             
             self.log(f"Added iptables rule for {client_ip} to access port {self.target_port}")
         except Exception as e:
@@ -159,8 +169,7 @@ class PortKnockingServer:
         
         for ip in expired:
             try:
-                subprocess.run(f"iptables -D INPUT -s {ip} -p tcp --dport {self.target_port} -j ACCEPT", 
-                             shell=True, check=True)
+                self._iptables('D', ip, check=True)
                 del self.allowed_ips[ip]
                 self.log(f"Access expired for {ip}")
             except Exception as e:
@@ -261,8 +270,7 @@ class PortKnockingServer:
         # Remove all iptables rules
         for ip in list(self.allowed_ips.keys()):
             try:
-                subprocess.run(f"iptables -D INPUT -s {ip} -p tcp --dport {self.target_port} -j ACCEPT", 
-                             shell=True, check=True)
+                self._iptables('D', ip, check=True)
             except:
                 pass
         
@@ -340,8 +348,6 @@ class SinglePacketAuthorization:
         
     def generate_token(self, client_ip, timestamp):
         """Generate authorization token"""
-        import hashlib
-        import hmac
         
         message = f"{client_ip}:{timestamp}".encode()
         token = hmac.new(self.shared_secret.encode(), message, hashlib.sha256).hexdigest()

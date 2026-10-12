@@ -292,8 +292,17 @@ class PortScanDetector:
     def trigger_scan_alert(self, ip_src, scan_type, message):
         """Trigger port scan alert"""
         self.stats['scans_detected'] += 1
+
+        # One alert per (source, scan type) per cooldown. Without this a single scan
+        # produced hundreds of identical alerts (352 for a 60-port sweep).
+        now = time.time()
+        last_alert = self.__dict__.setdefault('_last_alert', {})
+        if now - last_alert.get((ip_src, scan_type), 0) < 30:
+            self.stats['alerts_suppressed'] = self.stats.get('alerts_suppressed', 0) + 1
+            return
+        last_alert[(ip_src, scan_type)] = now
         self.stats['alerts_triggered'] += 1
-        
+
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
         # Add to suspicious IPs
@@ -325,9 +334,10 @@ class PortScanDetector:
         
         # Save to JSON
         try:
-            with open('scan_alerts.json', 'a') as f:
+            alerts_path = os.path.join(os.path.dirname(os.path.abspath(self.log_file)), 'scan_alerts.json')
+            with open(alerts_path, 'a') as f:
                 f.write(json.dumps(alert) + '\n')
-        except:
+        except OSError:
             pass
     
     def block_ip(self, ip):
