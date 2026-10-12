@@ -11,9 +11,9 @@ Social engineering is the psychological manipulation of people into performing a
 2. [Pretexting](./pretexting/README.md) - Fabricated scenarios to steal information
 3. [Baiting](./baiting/README.md) - Offering something enticing to deploy malware
 4. [Tailgating](./tailgating/README.md) - Following authorized personnel into restricted areas
-5. [Quid Pro Quo](./quid-pro-quo/README.md) - Offering a service in exchange for information
-6. [Vishing](./vishing/README.md) - Voice phishing over phone calls
-7. [Smishing](./smishing/README.md) - SMS/text message phishing
+5. Quid Pro Quo - Offering a service in exchange for information *(planned)*
+6. Vishing - Voice phishing over phone calls *(planned)*
+7. Smishing - SMS/text message phishing *(planned)*
 
 ## 🛡️ Social Engineering Attack Vectors
 

@@ -113,7 +113,7 @@ header_checks = regexp:/etc/postfix/header_checks
     
     def generate_header_checks(self):
         """Generate Postfix header check rules"""
-        rules = """#
+        rules = r"""#
 # Postfix header check rules
 # Place in /etc/postfix/header_checks
 #
@@ -235,7 +235,7 @@ acl_check_rcpt:
 # ============================================
 spamcheck:
   driver = accept
-  condition = ${if >{$spam_score_int}{50}{1}{0}}
+  condition = ${{if >{{$spam_score_int}}{{50}}{{1}}{{0}}}}
   transport = spam_filter
 
 # ============================================
@@ -314,15 +314,15 @@ if address :domain :matches "From" "*" {{
     set "domain" "${{1}}";
     
     # Check for common spoofs
-    if string "${domain}" contains "paypa" {{
-        if not string "${domain}" is "paypal.com" {{
+    if string "${{domain}}" contains "paypa" {{
+        if not string "${{domain}}" is "paypal.com" {{
             fileinto "Spam/SpoofedDomains";
             stop;
         }}
     }}
     
-    if string "${domain}" contains "amaz" {{
-        if not string "${domain}" is "amazon.com" {{
+    if string "${{domain}}" contains "amaz" {{
+        if not string "${{domain}}" is "amazon.com" {{
             fileinto "Spam/SpoofedDomains";
             stop;
         }}
@@ -383,53 +383,53 @@ keep;
 # ============================================
 # Main configuration
 # ============================================
-worker {
+worker {{
     type = "normal";
     bind_socket = "*:11333";
     bind_socket = "localhost:11334";
     count = 4;
-}
+}}
 
-worker {
+worker {{
     type = "controller";
     bind_socket = "localhost:11334";
     count = 1;
     secure_ip = "127.0.0.1";
     secure_ip = "::1";
     password = "admin";
-}
+}}
 
 # ============================================
 # Modules
 # ============================================
-surbl {
+surbl {{
     enabled = true;
-    symbols = {
+    symbols = {{
         "SURBL_BLOCKED"
-        "SURBL_BLOCKED" = {
+        "SURBL_BLOCKED" = {{
             weight = 5.0;
             description = "URL is listed in SURBL blocklist";
-        };
-    }
-}
+        }};
+    }}
+}}
 
-spamassassin {
+spamassassin {{
     enabled = true;
     spamd_host = "localhost";
     spamd_port = 783;
     timeout = 5.0;
-}
+}}
 
-dkim {
+dkim {{
     enabled = true;
     allow_username_mismatch = false;
     symbol_ok = "DKIM_SIGNED";
     symbol_allow = "DKIM_ALLOW";
     symbol_reject = "DKIM_REJECT";
     symbol_tempfail = "DKIM_TEMPFAIL";
-}
+}}
 
-spf {
+spf {{
     enabled = true;
     symbol_pass = "SPF_ALLOW";
     symbol_fail = "SPF_DENY";
@@ -438,76 +438,76 @@ spf {
     symbol_none = "SPF_NA";
     symbol_permerror = "SPF_PERMERROR";
     symbol_temperror = "SPF_TEMPFAIL";
-}
+}}
 
-dmarc {
+dmarc {{
     enabled = true;
     symbol_pass = "DMARC_POLICY_ALLOW";
     symbol_fail = "DMARC_POLICY_REJECT";
     symbol_quarantine = "DMARC_POLICY_QUARANTINE";
-}
+}}
 
 # ============================================
 # Rate limiting
 # ============================================
-ratelimit {
+ratelimit {{
     enabled = true;
-    limits = {
+    limits = {{
         # Limit per IP
-        ip = {
+        ip = {{
             burst = 100;
             rate = "50 / 1m";
-        }
+        }}
         # Limit per user
-        user = {
+        user = {{
             burst = 200;
             rate = "100 / 1m";
-        }
-    }
-    symbols = {
-        "RATELIMITED" = {
+        }}
+    }}
+    symbols = {{
+        "RATELIMITED" = {{
             weight = 3.0;
             description = "Message rate limited";
-        }
-    }
-}
+        }}
+    }}
+}}
 
 # ============================================
 # Phishing detection
 # ============================================
-phishing {
+phishing {{
     enabled = true;
     action = "reject";
-    symbols = {
-        "PHISHING" = {
+    symbols = {{
+        "PHISHING" = {{
             weight = 10.0;
             description = "Phishing attempt detected";
-        }
-    }
-}
+        }}
+    }}
+}}
 
 # ============================================
 # Attachments
 # ============================================
-mime_types {
+mime_types {{
     enabled = true;
     bad_extensions = [
         ".exe", ".scr", ".bat", ".cmd", ".vbs",
         ".js", ".jar", ".msi", ".ps1", ".dll"
     ];
-    symbols = {
-        "BAD_ATTACHMENT" = {
+    symbols = {{
+        "BAD_ATTACHMENT" = {{
             weight = 5.0;
             description = "Suspicious attachment type";
-        }
-    }
-}
+        }}
+    }}
+}}
 """
         return config
     
     def generate_spamassassin_rules(self):
         """Generate SpamAssassin rules"""
-        rules = f"""
+        rules = rf"""
 # SpamAssassin Rules for Phishing Detection
 # Generated on {datetime.now()}
 

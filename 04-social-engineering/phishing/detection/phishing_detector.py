@@ -1,7 +1,3 @@
-
-### phishing/detection/phishing_detector.py
-
-```python
 #!/usr/bin/env python3
 """
 Phishing Detector
@@ -102,8 +98,8 @@ class PhishingDetector:
             # Analyze headers
             header_results = self.analyze_headers(msg)
             results['headers'] = header_results
-            if header_results.get('suspicious'):
-                results['findings'].extend(header_results['suspicious'])
+            for note in header_results.get('suspicious', []):
+                results['findings'].append({'type': 'header_anomaly', 'detail': note})
             
             # Extract and analyze links
             links = self.extract_links(msg)
@@ -329,6 +325,37 @@ class PhishingDetector:
         
         return results
     
+    PHISH_KEYWORDS = ('login', 'signin', 'verify', 'secure', 'account', 'update', 'password', 'confirm', 'billing')
+    HOMOGLYPHS = str.maketrans({'0': 'o', '1': 'l', '3': 'e', '5': 's', '$': 's', '@': 'a'})
+
+    @staticmethod
+    def _edit_distance(a, b):
+        """Levenshtein distance (small strings only)."""
+        previous = list(range(len(b) + 1))
+        for i, ca in enumerate(a, 1):
+            current = [i]
+            for j, cb in enumerate(b, 1):
+                current.append(min(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + (ca != cb)))
+            previous = current
+        return previous[-1]
+
+    def _lookalike_brand(self, domain):
+        """Return the trusted brand a hostname imitates (paypa1, micros0ft, paypall ...), else None.
+        The genuine registered domain (for example accounts.google.com) is never flagged."""
+        extracted = tldextract.extract(domain)
+        registered = f"{extracted.domain}.{extracted.suffix}".lower()
+        if registered in self.trusted_domains:
+            return None
+        tokens = [t for t in re.split(r'[.\-_]', domain.lower()) if len(t) >= 4]
+        for trusted in self.trusted_domains:
+            brand = trusted.split('.')[0]
+            for token in tokens:
+                folded = token.translate(self.HOMOGLYPHS).replace('rn', 'm').replace('vv', 'w')
+                if token != brand and (folded == brand or
+                                       (len(token) >= 5 and self._edit_distance(folded, brand) == 1)):
+                    return trusted
+        return None
+
     def analyze_url(self, url):
         """Analyze URL for phishing indicators"""
         results = {
@@ -389,6 +416,17 @@ class PhishingDetector:
                     results['contains_spoof'] = True
                     results['findings'].append(f'Possible spoof of {trusted}')
             
+            # Look-alike (typosquatting / homoglyph) and phishing-keyword checks
+            brand = self._lookalike_brand(domain)
+            if brand:
+                results['contains_spoof'] = True
+                results['findings'].append(f'Look-alike of {brand}')
+            if domain.startswith('xn--') or '.xn--' in domain:
+                results['findings'].append('Punycode (internationalised) domain')
+            keywords = [k for k in self.PHISH_KEYWORDS if k in (domain + parsed.path).lower()]
+            if keywords:
+                results['findings'].append('Phishing keywords in URL: ' + ', '.join(sorted(keywords)))
+
             # Get domain age (if possible)
             try:
                 w = whois.whois(domain)
@@ -398,6 +436,8 @@ class PhishingDetector:
                     else:
                         creation_date = w.creation_date
                     
+                    if getattr(creation_date, 'tzinfo', None):
+                        creation_date = creation_date.replace(tzinfo=None)
                     age = datetime.now() - creation_date
                     results['domain_age'] = age.days
                     
@@ -405,7 +445,7 @@ class PhishingDetector:
                         results['findings'].append(f'Domain is very new ({age.days} days old)')
                     elif age.days < 90:
                         results['findings'].append(f'Domain is relatively new ({age.days} days old)')
-            except:
+            except Exception:
                 results['domain_age'] = 'Unknown'
             
             # Check SSL certificate
@@ -420,7 +460,6 @@ class PhishingDetector:
                             cert = ssock.getpeercert()
                             
                             # Check expiration
-                            from datetime import datetime
                             not_after = cert.get('notAfter')
                             if not_after:
                                 expiry = datetime.strptime(not_after, '%b %d %H:%M:%S %Y %Z')
@@ -430,14 +469,19 @@ class PhishingDetector:
                                     results['findings'].append('SSL certificate expiring soon')
                             
                             results['ssl_valid'] = True
-                except:
+                except Exception:
                     results['ssl_valid'] = False
                     results['findings'].append('SSL certificate validation failed')
             else:
                 results['findings'].append('URL uses HTTP (not HTTPS)')
             
             # Calculate risk score
-            results['risk_score'] = len(results['findings'])
+            weights = {'ip_address': 3, 'shortened': 2, 'suspicious_tld': 2, 'contains_spoof': 4}
+            score = sum(w for key, w in weights.items() if results.get(key))
+            score += sum(1 for f in results['findings'] if isinstance(f, str) and
+                         f.startswith(('Phishing keywords', 'URL uses HTTP', 'Domain is', 'SSL certificate',
+                                       'Punycode')))
+            results['risk_score'] = score
             if results['risk_score'] >= 5:
                 results['risk_level'] = 'HIGH'
             elif results['risk_score'] >= 3:
@@ -501,15 +545,16 @@ class PhishingDetector:
             score += len(results['headers']['suspicious']) * 10
         
         # Suspicious links
-        suspicious_links = [f for f in results.get('findings', []) if f.get('type') == 'suspicious_link']
+        findings = [f for f in results.get('findings', []) if isinstance(f, dict)]
+        suspicious_links = [f for f in findings if f.get('type') == 'suspicious_link']
         score += len(suspicious_links) * 15
         
         # Dangerous attachments
-        dangerous_attachments = [f for f in results.get('findings', []) if f.get('type') == 'dangerous_attachment']
+        dangerous_attachments = [f for f in findings if f.get('type') == 'dangerous_attachment']
         score += len(dangerous_attachments) * 20
         
         # Suspicious keywords
-        keyword_findings = [f for f in results.get('findings', []) if f.get('type') == 'suspicious_keywords']
+        keyword_findings = [f for f in findings if f.get('type') == 'suspicious_keywords']
         if keyword_findings:
             score += len(keyword_findings[0].get('keywords', [])) * 5
         

@@ -511,7 +511,20 @@ class SocialEngineeringDetector:
         else:
             return 'LOW'
     
+    @staticmethod
+    def _dedupe_recommendations(recommendations):
+        """Keep the first recommendation for each action (the same advice was printed twice)."""
+        seen, unique = set(), []
+        for rec in recommendations:
+            if rec['action'] not in seen:
+                seen.add(rec['action'])
+                unique.append(rec)
+        return unique
+
     def generate_recommendations(self, results):
+        return self._dedupe_recommendations(self._build_recommendations(results))
+
+    def _build_recommendations(self, results):
         """Generate recommendations based on findings"""
         recommendations = []
         

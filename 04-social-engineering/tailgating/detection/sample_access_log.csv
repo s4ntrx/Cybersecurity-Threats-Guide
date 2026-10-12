@@ -1,0 +1,16 @@
+timestamp,door,badge_id,direction,event,people_count
+2026-03-02T08:01:00,Lobby,B100,in,granted,1
+2026-03-02T08:03:00,Server-Room,B100,in,granted,1
+2026-03-02T08:05:00,Lobby,B200,in,granted,2
+2026-03-02T08:30:00,Lobby,B300,in,granted,1
+2026-03-02T09:10:00,Lobby,B300,in,granted,1
+2026-03-02T09:11:00,Finance,B400,in,granted,1
+2026-03-02T09:11:20,Warehouse,B400,in,granted,1
+2026-03-02T12:00:00,Server-Room,B100,out,granted,1
+2026-03-02T12:05:00,Server-Room,B999,in,denied,
+2026-03-02T12:05:10,Server-Room,B998,in,denied,
+2026-03-02T12:05:20,Server-Room,B997,in,denied,
+2026-03-02T12:05:30,Server-Room,B100,in,granted,1
+2026-03-02T13:00:00,Loading-Dock,B500,in,held_open,1
+2026-03-02T17:00:00,Lobby,B100,out,granted,1
+2026-03-07T22:15:00,Lobby,B600,in,granted,1
