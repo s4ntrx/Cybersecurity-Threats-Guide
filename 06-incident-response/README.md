@@ -10,9 +10,10 @@ Incident response is the systematic approach to managing and handling security b
 1. [Digital Forensics](./forensics/README.md) - Evidence collection and analysis
 2. [Memory Analysis](./forensics/README.md) - RAM forensics
 3. [Disk Forensics](./forensics/README.md) - Storage analysis
-4. [Containment Strategies](./containment/README.md) - Isolating threats
-5. [Recovery Procedures](./containment/README.md) - Restoring operations
-6. [Backup Recovery](./containment/README.md) - Data restoration
+4. Containment Strategies - Isolating threats *(planned)*
+5. Recovery Procedures - Restoring operations *(planned)*
+6. Backup Recovery - Data restoration *(planned)*
+7. [Post-Incident Analysis](./post-incident/README.md) - Lessons learned and metrics
 
 ## 🎯 Incident Response Phases
 

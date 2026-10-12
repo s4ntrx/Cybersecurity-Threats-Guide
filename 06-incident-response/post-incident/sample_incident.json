@@ -1,0 +1,23 @@
+{
+  "title": "Phishing-led credential theft on the finance mailbox",
+  "severity": "High",
+  "detected_by": "Mail gateway alert, confirmed by the SOC",
+  "summary": "A finance user entered credentials on a look-alike login page. The attacker signed in and created a forwarding rule. The account was contained within 50 minutes of detection.",
+  "events": [
+    {"time": "2026-03-02T08:12:00Z", "type": "start", "description": "Phishing email delivered to 14 users"},
+    {"time": "2026-03-02T09:40:00Z", "type": "note", "description": "User entered credentials on the fake page"},
+    {"time": "2026-03-02T11:05:00Z", "type": "detected", "description": "Gateway flagged a login from an unusual country"},
+    {"time": "2026-03-02T11:55:00Z", "type": "contained", "description": "Sessions revoked, password reset, forwarding rule removed"},
+    {"time": "2026-03-02T15:30:00Z", "type": "eradicated", "description": "Look-alike domain taken down; message pulled from all mailboxes"},
+    {"time": "2026-03-03T09:00:00Z", "type": "recovered", "description": "Account restored with a phishing-resistant MFA method"},
+    {"time": "2026-03-10T10:00:00Z", "type": "closed", "description": "Review meeting held"}
+  ],
+  "root_cause": "The account used SMS-based MFA and a one-time code was relayed through the fake page.",
+  "impact": "One mailbox compromised for about 1h25m. No evidence of data download beyond 36 forwarded messages.",
+  "what_went_well": ["Gateway alert fired within minutes of the unusual login", "Sessions were revoked before the forwarding rule was used again"],
+  "what_went_wrong": ["The look-alike domain was registered 2 days earlier and was not blocked", "SMS MFA was still allowed for finance staff"],
+  "action_items": [
+    {"item": "Require passkeys or hardware keys for finance staff", "owner": "IT Security", "due": "2026-04-15"},
+    {"item": "Block domains younger than 14 days at the mail gateway", "owner": "Messaging team", "due": "2026-03-31"}
+  ]
+}
