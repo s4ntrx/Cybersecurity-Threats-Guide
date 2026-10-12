@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: pip install -r tools/requirements.txt -r tools/requirements-dev.txt
+      - name: Syntax and undefined-name check
+        run: |
+          python -m compileall -q 01-network-security 02-web-application-security 03-malware-analysis 04-social-engineering 05-cryptography 06-incident-response
+          ruff check --select F821,F823,F811,F632 0*
+      - name: Run tests
+        run: pytest -q
