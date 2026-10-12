@@ -1,0 +1,3 @@
+# Only needed for memory forensics (06-incident-response/forensics/memory_analyzer.py).
+# The script shells out to the `vol` executable that this package provides.
+volatility3>=2.5.0

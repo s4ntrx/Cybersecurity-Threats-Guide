@@ -24,15 +24,15 @@ if command_exists python3; then
     python_version=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
     echo "✓ Python $python_version detected"
     
-    # Check if Python version is >= 3.8
-    if python3 -c "import sys; exit(0 if sys.version_info >= (3,8) else 1)"; then
+    # Check if Python version is >= 3.10
+    if python3 -c "import sys; exit(0 if sys.version_info >= (3,10) else 1)"; then
         echo "  ✓ Python version is compatible"
     else
-        echo "  ✗ Python 3.8+ required. Found $python_version"
+        echo "  ✗ Python 3.10+ required. Found $python_version"
         exit 1
     fi
 else
-    echo "✗ Python 3 not found. Please install Python 3.8+"
+    echo "✗ Python 3 not found. Please install Python 3.10+"
     exit 1
 fi
 
