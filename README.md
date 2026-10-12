@@ -40,109 +40,131 @@ This is an early-stage guide. Six categories exist, and most topics have documen
 ```mermaid
 flowchart TB
 
-    ROOT["CYBERSECURITY THREATS GUIDE"]
+    classDef core fill:#101827,color:#67E8F9,stroke:#22D3EE,stroke-width:3px
+    classDef network fill:#172554,color:#BFDBFE,stroke:#3B82F6,stroke-width:2px
+    classDef websec fill:#3B0764,color:#E9D5FF,stroke:#A855F7,stroke-width:2px
+    classDef malware fill:#450A0A,color:#FECACA,stroke:#EF4444,stroke-width:2px
+    classDef social fill:#431407,color:#FED7AA,stroke:#F97316,stroke-width:2px
+    classDef crypto fill:#052E16,color:#BBF7D0,stroke:#22C55E,stroke-width:2px
+    classDef incident fill:#422006,color:#FEF08A,stroke:#EAB308,stroke-width:2px
+    classDef infra fill:#1F2937,color:#F9FAFB,stroke:#9CA3AF,stroke-width:1px
+    classDef workflow fill:#172033,color:#A5F3FC,stroke:#06B6D4,stroke-width:1px
 
-    ROOT --> CORE
-    ROOT --> PLATFORM
-    ROOT --> DEVTOOLS
+    ROOT(("CYBERSECURITY<br/>THREATS GUIDE"))
 
-    subgraph CORE["CYBERSECURITY KNOWLEDGE BASE"]
-        direction TB
+    ROOT --- NET
+    ROOT --- WEB
+    ROOT --- MAL
+    ROOT --- SOC
+    ROOT --- CRYPTO
+    ROOT --- IR
 
-        NET["01. Network Security"]
-        WEB["02. Web Application Security"]
-        MAL["03. Malware Analysis"]
-        SOC["04. Social Engineering"]
-        CRYPTO["05. Cryptography"]
-        IR["06. Incident Response"]
-
-        NET --> DDOS["DDoS Attacks"]
-        NET --> MITM["Man-in-the-Middle"]
-        NET --> PORT["Port Scanning"]
-
-        WEB --> SQL["SQL Injection"]
-        WEB --> XSS["XSS Attacks"]
-
-        MAL --> RANSOM["Ransomware"]
-        MAL --> ROOTKIT["Rootkits"]
-        MAL --> TROJAN["Trojans"]
-
-        SOC --> PHISH["Phishing"]
-        SOC --> PRETEXT["Pretexting"]
-
-        CRYPTO --> ENC["Encryption"]
-        CRYPTO --> HASH["Hashing"]
-
-        IR --> CONT["Containment"]
-        IR --> FORENSICS["Forensics"]
-    end
-
-    subgraph SECURITY_WORKFLOW["SECURITY ANALYSIS WORKFLOW"]
+    subgraph SECURITY_DOMAINS["◈ SECURITY DOMAINS"]
         direction LR
-        DETECT["Threat Detection"]
-        ANALYZE["Analysis"]
-        PREVENT["Threat Prevention"]
-        DOCUMENT["Documentation"]
 
-        DETECT --> ANALYZE
-        ANALYZE --> PREVENT
-        PREVENT --> DOCUMENT
+        subgraph NETWORK_SECURITY["01 · NETWORK"]
+            direction TB
+            NET["Network Security"]
+            DDOS["DDoS Attacks"]
+            MITM["Man-in-the-Middle"]
+            PORT["Port Scanning"]
+            NET --> DDOS
+            NET --> MITM
+            NET --> PORT
+        end
+
+        subgraph WEB_SECURITY["02 · APPLICATION"]
+            direction TB
+            WEB["Web Application Security"]
+            SQL["SQL Injection"]
+            XSS["XSS Attacks"]
+            WEB --> SQL
+            WEB --> XSS
+        end
+
+        subgraph MALWARE_ANALYSIS["03 · MALWARE"]
+            direction TB
+            MAL["Malware Analysis"]
+            RANSOM["Ransomware"]
+            ROOTKIT["Rootkits"]
+            TROJAN["Trojans"]
+            MAL --> RANSOM
+            MAL --> ROOTKIT
+            MAL --> TROJAN
+        end
+
+        subgraph SOCIAL_ENGINEERING["04 · HUMAN FACTORS"]
+            direction TB
+            SOC["Social Engineering"]
+            PHISH["Phishing"]
+            PRETEXT["Pretexting"]
+            SOC --> PHISH
+            SOC --> PRETEXT
+        end
+
+        subgraph CRYPTOGRAPHY["05 · CRYPTOGRAPHY"]
+            direction TB
+            CRYPTO["Cryptography"]
+            ENC["Symmetric Encryption"]
+            HASH["Hashing"]
+            CRYPTO --> ENC
+            CRYPTO --> HASH
+        end
+
+        subgraph INCIDENT_RESPONSE["06 · RESPONSE"]
+            direction TB
+            IR["Incident Response"]
+            CONT["Containment"]
+            FORENSICS["Forensics"]
+            IR --> CONT
+            IR --> FORENSICS
+        end
     end
 
-    DDOS -.-> DETECT
-    MITM -.-> DETECT
-    PORT -.-> DETECT
-    SQL -.-> DETECT
-    XSS -.-> DETECT
-    RANSOM -.-> DETECT
-    ROOTKIT -.-> DETECT
-    TROJAN -.-> DETECT
-    PHISH -.-> DETECT
-    PRETEXT -.-> DETECT
-
-    subgraph PLATFORM["APPLICATION PLATFORM"]
-        direction TB
-
-        FRONTEND["cybersec-app/"]
-        NEXT["Next.js Frontend"]
-
-        BACKEND["api/"]
-        FLASK["Flask API - Experimental"]
-
-        FRONTEND --> NEXT
-        BACKEND --> FLASK
-
-        NEXT <-->|"HTTP / API Requests"| FLASK
+    subgraph DEFENSE_LAYER["◉ DEFENSE AND ANALYSIS LAYER"]
+        direction LR
+        DETECT["01 / DETECT"]
+        ANALYZE["02 / ANALYZE"]
+        PREVENT["03 / PREVENT"]
+        RESPOND["04 / RESPOND"]
+        DETECT --> ANALYZE --> PREVENT --> RESPOND
     end
 
-    subgraph DEVTOOLS["PROJECT CONFIGURATION AND TOOLS"]
-        direction TB
+    NET -.-> DETECT
+    WEB -.-> DETECT
+    MAL -.-> ANALYZE
+    SOC -.-> DETECT
+    CRYPTO -.-> PREVENT
+    IR -.-> RESPOND
 
-        SETUP["setup_tools.sh"]
-        REQ["requirements.txt"]
-        OPT["requirements-optional.txt"]
-
-        DOCS["README.md"]
-        LICENSE["LICENSE"]
-        CONTRIB["CONTRIBUTING.md"]
-        TEMPLATE["TOPIC_TEMPLATE.md"]
+    subgraph TECH_STACK["◈ APPLICATION ECOSYSTEM"]
+        direction LR
+        FRONTEND["NEXT.JS<br/>cybersec-app/"]
+        API["FLASK API<br/>api/ · Experimental"]
+        FRONTEND <-->|"API communication"| API
     end
 
-    ROOT --> DOCS
+    subgraph PROJECT_INFRASTRUCTURE["◈ PROJECT INFRASTRUCTURE"]
+        direction LR
+        DOCS["Documentation<br/>README · CONTRIBUTING"]
+        CONFIG["Environment<br/>requirements.txt"]
+        TOOLS["Automation<br/>setup_tools.sh"]
+        TEMPLATE["Topic Template<br/>TOPIC_TEMPLATE.md"]
+        LICENSE["License"]
+    end
 
-    classDef rootStyle fill:#15365C,color:#FFFFFF,stroke:#0B1F38,stroke-width:3px
-    classDef domainStyle fill:#D9EAF7,color:#15365C,stroke:#4682B4,stroke-width:2px
-    classDef topicStyle fill:#E2F0D9,color:#21511A,stroke:#70AD47,stroke-width:1px
-    classDef workflowStyle fill:#FFF2CC,color:#7F6000,stroke:#D6B656,stroke-width:2px
-    classDef platformStyle fill:#E4DFEC,color:#403152,stroke:#8064A2,stroke-width:2px
-    classDef toolStyle fill:#FCE4D6,color:#843C0C,stroke:#C65911,stroke-width:1px
+    ROOT --- TECH_STACK
+    ROOT --- PROJECT_INFRASTRUCTURE
 
-    class ROOT rootStyle
-    class NET,WEB,MAL,SOC,CRYPTO,IR domainStyle
-    class DDOS,MITM,PORT,SQL,XSS,RANSOM,ROOTKIT,TROJAN,PHISH,PRETEXT,ENC,HASH,CONT,FORENSICS topicStyle
-    class DETECT,ANALYZE,PREVENT,DOCUMENT workflowStyle
-    class FRONTEND,NEXT,BACKEND,FLASK platformStyle
-    class SETUP,REQ,OPT,DOCS,LICENSE,CONTRIB,TEMPLATE toolStyle
+    class ROOT core
+    class NET,DDOS,MITM,PORT network
+    class WEB,SQL,XSS websec
+    class MAL,RANSOM,ROOTKIT,TROJAN malware
+    class SOC,PHISH,PRETEXT social
+    class CRYPTO,ENC,HASH crypto
+    class IR,CONT,FORENSICS incident
+    class DETECT,ANALYZE,PREVENT,RESPOND workflow
+    class FRONTEND,API,DOCS,CONFIG,TOOLS,TEMPLATE,LICENSE infra
 ```
 
 ## Categories
