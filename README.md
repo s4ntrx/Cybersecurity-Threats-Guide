@@ -38,120 +38,111 @@ This is an early-stage guide. Six categories exist, and most topics have documen
 ## Repository structure
 
 ```mermaid
-mindmap
-  root((Cybersecurity Threats Guide))
-    Project Documentation
-      README.md
-      LICENSE
-      CONTRIBUTING.md
-      TOPIC_TEMPLATE.md
-    01 Network Security
-      DDoS Attacks
-        Detection
-          ddos_detection.py
-          traffic_analyzer.py
-        Prevention
-          firewall_rules.txt
-          rate_limiting.py
-        README.md
-      Man-in-the-Middle
-        Detection
-          arp_spoof_detector.py
-          ssl_strip_detector.py
-        Prevention
-          certificate_pinning.py
-          ssl_tls_config.py
-        README.md
-      Port Scanning
-        Detection
-          ids_rules.txt
-          port_scan_detector.py
-        Prevention
-          firewall_config.py
-          stealth_mode.py
-        README.md
-    02 Web Application Security
-      SQL Injection
-        Detection
-          sql_injection_detector.py
-          sql_injection_scanner.py
-        Prevention
-          input_validation.py
-          parameterized_queries.py
-        README.md
-      XSS Attacks
-        Detection
-          xss_detector.py
-        README.md
-    03 Malware Analysis
-      Ransomware
-        Detection
-          file_monitor.py
-          ransomware_behavior.py
-        Prevention
-          app_whitelisting.py
-          backup_system.py
-        README.md
-      Rootkits
-        Detection
-          integrity_checker.py
-          rootkit_detector.py
-        Prevention
-          kernel_patching.py
-          secure_boot.py
-        README.md
-      Trojans
-        Detection
-          process_analyzer.py
-          trojan_scanner.py
-        Prevention
-          av_config.py
-          sandbox_setup.py
-        README.md
-    04 Social Engineering
-      Phishing
-        Detection
-          email_analyzer.py
-          phishing_detector.py
-        Prevention
-          email_filters.py
-          training_materials.md
-        README.md
-      Pretexting
-        Detection
-          social_engineering_detector.py
-        Prevention
-          security_policy.md
-        README.md
-    05 Cryptography
-      Encryption
-        Symmetric Encryption
-          aes_example.py
-      Hashing
-        README.md
-        integrity_checker.py
-        password_hashing.py
-      README.md
-    06 Incident Response
-      Containment
-        backup_recovery.py
-        isolation_script.py
-      Forensics
-        README.md
-        disk_forensics.py
-        memory_analyzer.py
-      README.md
-    Applications
-      api
-        Flask API
-        Experimental
-      cybersec-app
-        Next.js Website
-        README.md
-    Development Tools
-      setup_tools.sh
-      requirements.txt
-      requirements-optional.txt
+flowchart TB
+
+    ROOT["CYBERSECURITY THREATS GUIDE"]
+
+    ROOT --> CORE
+    ROOT --> PLATFORM
+    ROOT --> DEVTOOLS
+
+    subgraph CORE["CYBERSECURITY KNOWLEDGE BASE"]
+        direction TB
+
+        NET["01. Network Security"]
+        WEB["02. Web Application Security"]
+        MAL["03. Malware Analysis"]
+        SOC["04. Social Engineering"]
+        CRYPTO["05. Cryptography"]
+        IR["06. Incident Response"]
+
+        NET --> DDOS["DDoS Attacks"]
+        NET --> MITM["Man-in-the-Middle"]
+        NET --> PORT["Port Scanning"]
+
+        WEB --> SQL["SQL Injection"]
+        WEB --> XSS["XSS Attacks"]
+
+        MAL --> RANSOM["Ransomware"]
+        MAL --> ROOTKIT["Rootkits"]
+        MAL --> TROJAN["Trojans"]
+
+        SOC --> PHISH["Phishing"]
+        SOC --> PRETEXT["Pretexting"]
+
+        CRYPTO --> ENC["Encryption"]
+        CRYPTO --> HASH["Hashing"]
+
+        IR --> CONT["Containment"]
+        IR --> FORENSICS["Forensics"]
+    end
+
+    subgraph SECURITY_WORKFLOW["SECURITY ANALYSIS WORKFLOW"]
+        direction LR
+        DETECT["Threat Detection"]
+        ANALYZE["Analysis"]
+        PREVENT["Threat Prevention"]
+        DOCUMENT["Documentation"]
+
+        DETECT --> ANALYZE
+        ANALYZE --> PREVENT
+        PREVENT --> DOCUMENT
+    end
+
+    DDOS -.-> DETECT
+    MITM -.-> DETECT
+    PORT -.-> DETECT
+    SQL -.-> DETECT
+    XSS -.-> DETECT
+    RANSOM -.-> DETECT
+    ROOTKIT -.-> DETECT
+    TROJAN -.-> DETECT
+    PHISH -.-> DETECT
+    PRETEXT -.-> DETECT
+
+    subgraph PLATFORM["APPLICATION PLATFORM"]
+        direction TB
+
+        FRONTEND["cybersec-app/"]
+        NEXT["Next.js Frontend"]
+
+        BACKEND["api/"]
+        FLASK["Flask API - Experimental"]
+
+        FRONTEND --> NEXT
+        BACKEND --> FLASK
+
+        NEXT <-->|"HTTP / API Requests"| FLASK
+    end
+
+    subgraph DEVTOOLS["PROJECT CONFIGURATION AND TOOLS"]
+        direction TB
+
+        SETUP["setup_tools.sh"]
+        REQ["requirements.txt"]
+        OPT["requirements-optional.txt"]
+
+        DOCS["README.md"]
+        LICENSE["LICENSE"]
+        CONTRIB["CONTRIBUTING.md"]
+        TEMPLATE["TOPIC_TEMPLATE.md"]
+    end
+
+    ROOT --> DOCS
+
+    classDef rootStyle fill:#15365C,color:#FFFFFF,stroke:#0B1F38,stroke-width:3px
+    classDef domainStyle fill:#D9EAF7,color:#15365C,stroke:#4682B4,stroke-width:2px
+    classDef topicStyle fill:#E2F0D9,color:#21511A,stroke:#70AD47,stroke-width:1px
+    classDef workflowStyle fill:#FFF2CC,color:#7F6000,stroke:#D6B656,stroke-width:2px
+    classDef platformStyle fill:#E4DFEC,color:#403152,stroke:#8064A2,stroke-width:2px
+    classDef toolStyle fill:#FCE4D6,color:#843C0C,stroke:#C65911,stroke-width:1px
+
+    class ROOT rootStyle
+    class NET,WEB,MAL,SOC,CRYPTO,IR domainStyle
+    class DDOS,MITM,PORT,SQL,XSS,RANSOM,ROOTKIT,TROJAN,PHISH,PRETEXT,ENC,HASH,CONT,FORENSICS topicStyle
+    class DETECT,ANALYZE,PREVENT,DOCUMENT workflowStyle
+    class FRONTEND,NEXT,BACKEND,FLASK platformStyle
+    class SETUP,REQ,OPT,DOCS,LICENSE,CONTRIB,TEMPLATE toolStyle
 ```
 
 ## Categories
