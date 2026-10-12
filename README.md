@@ -40,116 +40,143 @@ This is an early-stage guide. Six categories exist, and most topics have documen
 ```mermaid
 flowchart TB
 
-    ROOT(("⬡ CYBERSECURITY<br/>THREAT INTELLIGENCE"))
+    ROOT(["⬡ CYBERSECURITY THREATS GUIDE"])
 
-    %% SIX THREAT CLUSTERS
-    ROOT <==> NET
-    ROOT <==> WEB
-    ROOT <==> MAL
-    ROOT <==> SOCIAL
-    ROOT <==> CRYPTO
-    ROOT <==> IR
+    subgraph THREATS["01 // THREAT LANDSCAPE"]
+        direction LR
 
-    NET(("01<br/>NETWORK<br/>SECURITY"))
-    WEB(("02<br/>WEB APP<br/>SECURITY"))
-    MAL(("03<br/>MALWARE<br/>ANALYSIS"))
-    SOCIAL(("04<br/>SOCIAL<br/>ENGINEERING"))
-    CRYPTO(("05<br/>CRYPTOGRAPHY"))
-    IR(("06<br/>INCIDENT<br/>RESPONSE"))
+        subgraph NETWORK["NETWORK"]
+            direction TB
+            DDOS["DDoS Attacks"]
+            MITM["Man-in-the-Middle"]
+            PORT["Port Scanning"]
+        end
 
-    %% NETWORK CLUSTER
-    NET --- DDOS["DDoS Attacks"]
-    NET --- MITM["Man-in-the-Middle"]
-    NET --- PORT["Port Scanning"]
+        subgraph APPLICATION["WEB APPLICATION"]
+            direction TB
+            SQL["SQL Injection"]
+            XSS["XSS Attacks"]
+        end
 
-    DDOS --- DD["Detection / Prevention"]
-    MITM --- MD["Detection / Prevention"]
-    PORT --- PD["Detection / Prevention"]
+        subgraph MALWARE["MALWARE"]
+            direction TB
+            RANSOM["Ransomware"]
+            ROOTKIT["Rootkits"]
+            TROJAN["Trojans"]
+        end
 
-    %% WEB CLUSTER
-    WEB --- SQL["SQL Injection"]
-    WEB --- XSS["XSS Attacks"]
+        subgraph HUMAN["SOCIAL ENGINEERING"]
+            direction TB
+            PHISH["Phishing"]
+            PRETEXT["Pretexting"]
+        end
 
-    SQL --- SD["Detection / Prevention"]
-    XSS --- XD["Detection"]
+        subgraph CRYPTO["CRYPTOGRAPHY"]
+            direction TB
+            ENC["Symmetric Encryption"]
+            HASH["Hashing"]
+        end
 
-    %% MALWARE CLUSTER
-    MAL --- RANSOM["Ransomware"]
-    MAL --- ROOTKIT["Rootkits"]
-    MAL --- TROJAN["Trojans"]
+        subgraph RESPONSE["INCIDENT RESPONSE"]
+            direction TB
+            CONT["Containment"]
+            FORENSICS["Forensics"]
+        end
+    end
 
-    RANSOM --- RD["Detection / Prevention"]
-    ROOTKIT --- RKD["Detection / Prevention"]
-    TROJAN --- TD["Detection / Prevention"]
+    ROOT --> THREATS
 
-    %% SOCIAL ENGINEERING CLUSTER
-    SOCIAL --- PHISH["Phishing"]
-    SOCIAL --- PRETEXT["Pretexting"]
+    subgraph CAPABILITIES["02 // SECURITY CAPABILITIES"]
+        direction LR
+        DETECT["◉ DETECTION"]
+        ANALYZE["⌕ ANALYSIS"]
+        PREVENT["⬡ PREVENTION"]
+        RECOVER["↻ RECOVERY"]
 
-    PHISH --- PHD["Detection / Prevention"]
-    PRETEXT --- PTD["Detection / Prevention"]
+        DETECT <--> ANALYZE
+        ANALYZE <--> PREVENT
+        PREVENT <--> RECOVER
+    end
 
-    %% CRYPTOGRAPHY CLUSTER
-    CRYPTO --- ENC["Symmetric Encryption"]
-    CRYPTO --- HASH["Hashing"]
+    THREATS --> CAPABILITIES
 
-    ENC --- AES["aes_example.py"]
-    HASH --- HASHFILES["Integrity Checker<br/>Password Hashing"]
+    DDOS -.-> DETECT
+    MITM -.-> DETECT
+    PORT -.-> DETECT
+    SQL -.-> ANALYZE
+    XSS -.-> DETECT
+    RANSOM -.-> RECOVER
+    ROOTKIT -.-> ANALYZE
+    TROJAN -.-> DETECT
+    PHISH -.-> DETECT
+    PRETEXT -.-> ANALYZE
+    ENC -.-> PREVENT
+    HASH -.-> ANALYZE
+    CONT -.-> RECOVER
+    FORENSICS -.-> ANALYZE
 
-    %% INCIDENT RESPONSE CLUSTER
-    IR --- CONT["Containment"]
-    IR --- FORENSICS["Forensics"]
+    subgraph IMPLEMENTATION["03 // IMPLEMENTATION LAYER"]
+        direction LR
 
-    CONT --- CONTFILES["Backup Recovery<br/>Isolation Script"]
-    FORENSICS --- FORENSICFILES["Disk Forensics<br/>Memory Analyzer"]
+        subgraph FRONTEND["FRONTEND"]
+            NEXT["Next.js"]
+            NEXTDIR["cybersec-app/"]
+            NEXT --- NEXTDIR
+        end
 
-    %% DEFENSE CAPABILITIES
-    ROOT <--> DEFENSE(("DEFENSE<br/>LAYER"))
+        subgraph BACKEND["BACKEND"]
+            FLASK["Flask API"]
+            APIDIR["api/ · Experimental"]
+            FLASK --- APIDIR
+        end
 
-    DEFENSE --- DETECT["Threat Detection"]
-    DEFENSE --- PREVENT["Threat Prevention"]
-    DEFENSE --- RESPOND["Incident Handling"]
+        subgraph TOOLKIT["TOOLKIT"]
+            SETUP["setup_tools.sh"]
+            REQ["requirements.txt"]
+            OPT["requirements-optional.txt"]
+        end
 
-    %% PLATFORM
-    ROOT <--> PLATFORM(("APPLICATION<br/>PLATFORM"))
+        NEXT <-->|"HTTP / API"| FLASK
+    end
 
-    PLATFORM --- FRONTEND["Next.js<br/>cybersec-app/"]
-    PLATFORM --- API["Flask API<br/>api/ · Experimental"]
+    CAPABILITIES --> IMPLEMENTATION
 
-    FRONTEND <-->|"API Requests"| API
+    subgraph GOVERNANCE["04 // PROJECT GOVERNANCE"]
+        direction LR
+        README["README.md"]
+        CONTRIBUTING["CONTRIBUTING.md"]
+        TEMPLATE["TOPIC_TEMPLATE.md"]
+        LICENSE["LICENSE"]
+    end
 
-    %% REPOSITORY SUPPORT
-    ROOT -.-> SUPPORT(("PROJECT<br/>FOUNDATION"))
+    IMPLEMENTATION --> GOVERNANCE
 
-    SUPPORT --- DOCS["README.md<br/>CONTRIBUTING.md"]
-    SUPPORT --- TEMPLATE["TOPIC_TEMPLATE.md"]
-    SUPPORT --- LICENSE["LICENSE"]
-    SUPPORT --- TOOLS["Development Tools<br/>Setup and Requirements"]
+    classDef rootStyle fill:#020617,color:#67E8F9,stroke:#22D3EE,stroke-width:4px
+    classDef networkStyle fill:#172554,color:#BFDBFE,stroke:#3B82F6,stroke-width:2px
+    classDef webStyle fill:#3B0764,color:#E9D5FF,stroke:#A855F7,stroke-width:2px
+    classDef malwareStyle fill:#450A0A,color:#FECACA,stroke:#EF4444,stroke-width:2px
+    classDef humanStyle fill:#431407,color:#FED7AA,stroke:#F97316,stroke-width:2px
+    classDef cryptoStyle fill:#052E16,color:#BBF7D0,stroke:#22C55E,stroke-width:2px
+    classDef responseStyle fill:#422006,color:#FEF08A,stroke:#EAB308,stroke-width:2px
+    classDef capabilityStyle fill:#083344,color:#A5F3FC,stroke:#06B6D4,stroke-width:2px
+    classDef implementationStyle fill:#1E1B4B,color:#E0E7FF,stroke:#818CF8,stroke-width:2px
+    classDef governanceStyle fill:#27272A,color:#FAFAFA,stroke:#A1A1AA,stroke-width:1px
 
-    %% STYLES
-    classDef core fill:#020617,color:#67E8F9,stroke:#22D3EE,stroke-width:4px
-    classDef domain fill:#172554,color:#DBEAFE,stroke:#60A5FA,stroke-width:3px
-    classDef webdomain fill:#3B0764,color:#F3E8FF,stroke:#C084FC,stroke-width:3px
-    classDef malwaredomain fill:#450A0A,color:#FEE2E2,stroke:#F87171,stroke-width:3px
-    classDef socialdomain fill:#431407,color:#FFEDD5,stroke:#FB923C,stroke-width:3px
-    classDef cryptodomain fill:#052E16,color:#DCFCE7,stroke:#4ADE80,stroke-width:3px
-    classDef incidentdomain fill:#422006,color:#FEF9C3,stroke:#FACC15,stroke-width:3px
-    classDef leaf fill:#111827,color:#E5E7EB,stroke:#64748B,stroke-width:1px
-    classDef defense fill:#083344,color:#A5F3FC,stroke:#06B6D4,stroke-width:3px
-    classDef platform fill:#312E81,color:#E0E7FF,stroke:#818CF8,stroke-width:3px
-    classDef support fill:#27272A,color:#FAFAFA,stroke:#A1A1AA,stroke-width:2px
+    class ROOT rootStyle
+    class DDOS,MITM,PORT networkStyle
+    class SQL,XSS webStyle
+    class RANSOM,ROOTKIT,TROJAN malwareStyle
+    class PHISH,PRETEXT humanStyle
+    class ENC,HASH cryptoStyle
+    class CONT,FORENSICS responseStyle
+    class DETECT,ANALYZE,PREVENT,RECOVER capabilityStyle
+    class NEXT,NEXTDIR,FLASK,APIDIR,SETUP,REQ,OPT implementationStyle
+    class README,CONTRIBUTING,TEMPLATE,LICENSE governanceStyle
 
-    class ROOT core
-    class NET domain
-    class WEB webdomain
-    class MAL malwaredomain
-    class SOCIAL socialdomain
-    class CRYPTO cryptodomain
-    class IR incidentdomain
-    class DDOS,MITM,PORT,DD,MD,PD,SQL,XSS,SD,XD,RANSOM,ROOTKIT,TROJAN,RD,RKD,TD,PHISH,PRETEXT,PHD,PTD,ENC,HASH,AES,HASHFILES,CONT,FORENSICS,CONTFILES,FORENSICFILES leaf
-    class DEFENSE,DETECT,PREVENT,RESPOND defense
-    class PLATFORM,FRONTEND,API platform
-    class SUPPORT,DOCS,TEMPLATE,LICENSE,TOOLS support
+    style THREATS fill:#0B1120,stroke:#334155,stroke-width:2px
+    style CAPABILITIES fill:#082F49,stroke:#0891B2,stroke-width:2px
+    style IMPLEMENTATION fill:#1E1B4B,stroke:#6366F1,stroke-width:2px
+    style GOVERNANCE fill:#18181B,stroke:#71717A,stroke-width:2px
 
     linkStyle default stroke:#64748B,stroke-width:1.5px
 ```
