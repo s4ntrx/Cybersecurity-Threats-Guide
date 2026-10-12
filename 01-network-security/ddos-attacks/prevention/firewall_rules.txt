@@ -1,6 +1,4 @@
-# Firewall Rules for DDoS Mitigation
-# Location: 01-network-security/ddos-attacks/prevention/firewall_rules.txt
-#
+# Firewall Rules for DDoS Mitigation.
 # These rules can be used with iptables (Linux) or adapted for other firewalls
 # IMPORTANT: Test in staging environment before applying to production
 
