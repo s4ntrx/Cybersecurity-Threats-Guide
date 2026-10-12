@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Rate Limiting Implementation for DDoS Prevention
-Location: 01-network-security/ddos-attacks/prevention/rate_limiting.py
 
 This script demonstrates various rate limiting techniques to prevent DDoS attacks.
 """
