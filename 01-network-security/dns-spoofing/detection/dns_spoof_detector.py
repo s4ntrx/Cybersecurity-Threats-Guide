@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 DNS spoofing / cache-poisoning detector
-Location: 01-network-security/dns-spoofing/detection/dns_spoof_detector.py
 
 Passively watches DNS traffic (live or from a .pcap) and raises alerts for the patterns a spoofing
 attack produces:
