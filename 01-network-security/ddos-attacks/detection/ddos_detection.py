@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 DDoS Attack Detection Script
-Location: 01-network-security/ddos-attacks/detection/ddos_detection.py
 
 This script monitors network traffic and detects potential DDoS attacks
 by analyzing packet rates, connection patterns, and traffic anomalies.
