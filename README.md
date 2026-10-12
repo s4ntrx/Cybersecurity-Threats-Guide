@@ -40,162 +40,118 @@ This is an early-stage guide. Six categories exist, and most topics have documen
 ```mermaid
 flowchart TB
 
-    %% ==========================================
-    %% CYBERSECURITY COMMAND CENTER
-    %% ==========================================
+    ROOT(("⬡ CYBERSECURITY<br/>THREAT INTELLIGENCE"))
 
-    START(["◈ CYBERSECURITY THREATS GUIDE<br/>THREAT INTELLIGENCE COMMAND CENTER"])
+    %% SIX THREAT CLUSTERS
+    ROOT <==> NET
+    ROOT <==> WEB
+    ROOT <==> MAL
+    ROOT <==> SOCIAL
+    ROOT <==> CRYPTO
+    ROOT <==> IR
 
-    START --> CONTROL
+    NET(("01<br/>NETWORK<br/>SECURITY"))
+    WEB(("02<br/>WEB APP<br/>SECURITY"))
+    MAL(("03<br/>MALWARE<br/>ANALYSIS"))
+    SOCIAL(("04<br/>SOCIAL<br/>ENGINEERING"))
+    CRYPTO(("05<br/>CRYPTOGRAPHY"))
+    IR(("06<br/>INCIDENT<br/>RESPONSE"))
 
-    CONTROL{{"CENTRAL SECURITY HUB<br/>Monitor · Investigate · Defend"}}
+    %% NETWORK CLUSTER
+    NET --- DDOS["DDoS Attacks"]
+    NET --- MITM["Man-in-the-Middle"]
+    NET --- PORT["Port Scanning"]
 
-    %% THREAT INTELLIGENCE DIVISIONS
-    subgraph THREAT_GRID["01 / THREAT INTELLIGENCE DIVISIONS"]
-        direction LR
+    DDOS --- DD["Detection / Prevention"]
+    MITM --- MD["Detection / Prevention"]
+    PORT --- PD["Detection / Prevention"]
 
-        subgraph G1["NETWORK OPERATIONS"]
-            direction TB
-            N1["01 · Network Security"]
-            N2["DDoS Attacks"]
-            N3["Man-in-the-Middle"]
-            N4["Port Scanning"]
-            N1 --> N2
-            N1 --> N3
-            N1 --> N4
-        end
+    %% WEB CLUSTER
+    WEB --- SQL["SQL Injection"]
+    WEB --- XSS["XSS Attacks"]
 
-        subgraph G2["APPLICATION DEFENSE"]
-            direction TB
-            W1["02 · Web Security"]
-            W2["SQL Injection"]
-            W3["XSS Attacks"]
-            W1 --> W2
-            W1 --> W3
-        end
+    SQL --- SD["Detection / Prevention"]
+    XSS --- XD["Detection"]
 
-        subgraph G3["MALWARE INTELLIGENCE"]
-            direction TB
-            M1["03 · Malware Analysis"]
-            M2["Ransomware"]
-            M3["Rootkits"]
-            M4["Trojans"]
-            M1 --> M2
-            M1 --> M3
-            M1 --> M4
-        end
+    %% MALWARE CLUSTER
+    MAL --- RANSOM["Ransomware"]
+    MAL --- ROOTKIT["Rootkits"]
+    MAL --- TROJAN["Trojans"]
 
-        subgraph G4["HUMAN THREAT ANALYSIS"]
-            direction TB
-            S1["04 · Social Engineering"]
-            S2["Phishing"]
-            S3["Pretexting"]
-            S1 --> S2
-            S1 --> S3
-        end
+    RANSOM --- RD["Detection / Prevention"]
+    ROOTKIT --- RKD["Detection / Prevention"]
+    TROJAN --- TD["Detection / Prevention"]
 
-        subgraph G5["CRYPTOGRAPHIC SERVICES"]
-            direction TB
-            C1["05 · Cryptography"]
-            C2["Symmetric Encryption"]
-            C3["Hashing"]
-            C1 --> C2
-            C1 --> C3
-        end
+    %% SOCIAL ENGINEERING CLUSTER
+    SOCIAL --- PHISH["Phishing"]
+    SOCIAL --- PRETEXT["Pretexting"]
 
-        subgraph G6["INCIDENT COMMAND"]
-            direction TB
-            I1["06 · Incident Response"]
-            I2["Containment"]
-            I3["Forensics"]
-            I1 --> I2
-            I1 --> I3
-        end
-    end
+    PHISH --- PHD["Detection / Prevention"]
+    PRETEXT --- PTD["Detection / Prevention"]
 
-    CONTROL ==> THREAT_GRID
+    %% CRYPTOGRAPHY CLUSTER
+    CRYPTO --- ENC["Symmetric Encryption"]
+    CRYPTO --- HASH["Hashing"]
 
-    %% SECURITY OPERATIONS PIPELINE
-    subgraph SOC["02 / SECURITY OPERATIONS PIPELINE"]
-        direction LR
-        D["01<br/>DETECT"]
-        A["02<br/>ANALYZE"]
-        P["03<br/>PREVENT"]
-        R["04<br/>RESPOND"]
-        L["05<br/>LEARN"]
+    ENC --- AES["aes_example.py"]
+    HASH --- HASHFILES["Integrity Checker<br/>Password Hashing"]
 
-        D ==> A
-        A ==> P
-        P ==> R
-        R ==> L
-        L -.-> D
-    end
+    %% INCIDENT RESPONSE CLUSTER
+    IR --- CONT["Containment"]
+    IR --- FORENSICS["Forensics"]
 
-    THREAT_GRID ==> SOC
+    CONT --- CONTFILES["Backup Recovery<br/>Isolation Script"]
+    FORENSICS --- FORENSICFILES["Disk Forensics<br/>Memory Analyzer"]
 
-    %% APPLICATION INFRASTRUCTURE
-    subgraph PLATFORM["03 / APPLICATION & ENGINEERING PLATFORM"]
-        direction LR
+    %% DEFENSE CAPABILITIES
+    ROOT <--> DEFENSE(("DEFENSE<br/>LAYER"))
 
-        subgraph FRONTEND["PRESENTATION"]
-            F1["Next.js Website"]
-            F2["cybersec-app/"]
-            F1 --- F2
-        end
+    DEFENSE --- DETECT["Threat Detection"]
+    DEFENSE --- PREVENT["Threat Prevention"]
+    DEFENSE --- RESPOND["Incident Handling"]
 
-        subgraph BACKEND["SERVICE LAYER"]
-            B1["Flask API"]
-            B2["api/ · Experimental"]
-            B1 --- B2
-        end
+    %% PLATFORM
+    ROOT <--> PLATFORM(("APPLICATION<br/>PLATFORM"))
 
-        subgraph ENGINEERING["ENGINEERING TOOLKIT"]
-            E1["setup_tools.sh"]
-            E2["requirements.txt"]
-            E3["requirements-optional.txt"]
-        end
+    PLATFORM --- FRONTEND["Next.js<br/>cybersec-app/"]
+    PLATFORM --- API["Flask API<br/>api/ · Experimental"]
 
-        FRONTEND <-->|"HTTP / API"| BACKEND
-    end
+    FRONTEND <-->|"API Requests"| API
 
-    SOC ==> PLATFORM
+    %% REPOSITORY SUPPORT
+    ROOT -.-> SUPPORT(("PROJECT<br/>FOUNDATION"))
 
-    %% KNOWLEDGE AND GOVERNANCE
-    subgraph GOVERNANCE["04 / KNOWLEDGE & GOVERNANCE"]
-        direction LR
-        DOC1["README.md"]
-        DOC2["CONTRIBUTING.md"]
-        DOC3["TOPIC_TEMPLATE.md"]
-        DOC4["LICENSE"]
-    end
+    SUPPORT --- DOCS["README.md<br/>CONTRIBUTING.md"]
+    SUPPORT --- TEMPLATE["TOPIC_TEMPLATE.md"]
+    SUPPORT --- LICENSE["LICENSE"]
+    SUPPORT --- TOOLS["Development Tools<br/>Setup and Requirements"]
 
-    PLATFORM --- GOVERNANCE
+    %% STYLES
+    classDef core fill:#020617,color:#67E8F9,stroke:#22D3EE,stroke-width:4px
+    classDef domain fill:#172554,color:#DBEAFE,stroke:#60A5FA,stroke-width:3px
+    classDef webdomain fill:#3B0764,color:#F3E8FF,stroke:#C084FC,stroke-width:3px
+    classDef malwaredomain fill:#450A0A,color:#FEE2E2,stroke:#F87171,stroke-width:3px
+    classDef socialdomain fill:#431407,color:#FFEDD5,stroke:#FB923C,stroke-width:3px
+    classDef cryptodomain fill:#052E16,color:#DCFCE7,stroke:#4ADE80,stroke-width:3px
+    classDef incidentdomain fill:#422006,color:#FEF9C3,stroke:#FACC15,stroke-width:3px
+    classDef leaf fill:#111827,color:#E5E7EB,stroke:#64748B,stroke-width:1px
+    classDef defense fill:#083344,color:#A5F3FC,stroke:#06B6D4,stroke-width:3px
+    classDef platform fill:#312E81,color:#E0E7FF,stroke:#818CF8,stroke-width:3px
+    classDef support fill:#27272A,color:#FAFAFA,stroke:#A1A1AA,stroke-width:2px
 
-    %% VISUAL DESIGN
-    classDef command fill:#101827,color:#67E8F9,stroke:#22D3EE,stroke-width:4px
-    classDef network fill:#172554,color:#DBEAFE,stroke:#3B82F6,stroke-width:2px
-    classDef application fill:#3B0764,color:#F3E8FF,stroke:#A855F7,stroke-width:2px
-    classDef malware fill:#450A0A,color:#FEE2E2,stroke:#EF4444,stroke-width:2px
-    classDef social fill:#431407,color:#FFEDD5,stroke:#F97316,stroke-width:2px
-    classDef crypto fill:#052E16,color:#DCFCE7,stroke:#22C55E,stroke-width:2px
-    classDef incident fill:#422006,color:#FEF9C3,stroke:#EAB308,stroke-width:2px
-    classDef pipeline fill:#1E293B,color:#BAE6FD,stroke:#38BDF8,stroke-width:2px
-    classDef infrastructure fill:#27272A,color:#FAFAFA,stroke:#A1A1AA,stroke-width:1px
+    class ROOT core
+    class NET domain
+    class WEB webdomain
+    class MAL malwaredomain
+    class SOCIAL socialdomain
+    class CRYPTO cryptodomain
+    class IR incidentdomain
+    class DDOS,MITM,PORT,DD,MD,PD,SQL,XSS,SD,XD,RANSOM,ROOTKIT,TROJAN,RD,RKD,TD,PHISH,PRETEXT,PHD,PTD,ENC,HASH,AES,HASHFILES,CONT,FORENSICS,CONTFILES,FORENSICFILES leaf
+    class DEFENSE,DETECT,PREVENT,RESPOND defense
+    class PLATFORM,FRONTEND,API platform
+    class SUPPORT,DOCS,TEMPLATE,LICENSE,TOOLS support
 
-    class START,CONTROL command
-    class N1,N2,N3,N4 network
-    class W1,W2,W3 application
-    class M1,M2,M3,M4 malware
-    class S1,S2,S3 social
-    class C1,C2,C3 crypto
-    class I1,I2,I3 incident
-    class D,A,P,R,L pipeline
-    class F1,F2,B1,B2,E1,E2,E3,DOC1,DOC2,DOC3,DOC4 infrastructure
-
-    style THREAT_GRID fill:#0B1220,stroke:#334155,stroke-width:2px
-    style SOC fill:#0F172A,stroke:#38BDF8,stroke-width:2px
-    style PLATFORM fill:#111827,stroke:#A78BFA,stroke-width:2px
-    style GOVERNANCE fill:#18181B,stroke:#71717A,stroke-width:2px
+    linkStyle default stroke:#64748B,stroke-width:1.5px
 ```
 
 ## Categories
