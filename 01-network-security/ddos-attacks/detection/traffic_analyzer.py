@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Network Traffic Analyzer
-Location: 01-network-security/ddos-attacks/detection/traffic_analyzer.py
 
 This script analyzes network traffic patterns to identify anomalies
 and potential DDoS attack signatures.
