@@ -11,7 +11,7 @@ Network security involves protecting the usability, reliability, integrity, and 
 2. [Man-in-the-Middle (MITM)](./man-in-the-middle/README.md)
 3. [Port Scanning](./port-scanning/README.md)
 4. [DNS Spoofing](./dns-spoofing/README.md)
-5. [ARP Poisoning](./arp-poisoning/README.md)
+5. ARP Poisoning *(planned)*
 
 ## 🛡️ Common Network Threats
 
