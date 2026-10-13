@@ -32,15 +32,6 @@ npm start             # serve the production build
 npm run check-links   # with the site running: crawl every page and link
 ```
 
-## Deploy on Vercel
-
-1. In Vercel choose **Add New, Project**, and import the GitHub repository.
-2. Set **Root Directory** to `cybersec-app`. Vercel detects Next.js and uses `vercel.json`.
-3. Under **Settings, General, Root Directory**, keep **Include source files outside of the Root Directory in the Build Step** enabled. The build reads the topic folders one level above the app.
-4. Optional: set `NEXT_PUBLIC_SITE_URL` (for example `https://your-domain.com`) so the sitemap and social tags use your real address. Without it Vercel's production URL is used.
-5. Deploy. Every push to `main` redeploys, and every pull request gets a preview URL.
-
-If the outside-files setting is turned off, the build falls back to the committed snapshot `content/knowledge.json` and still succeeds, but the site then shows the content as of the last time someone ran `npm run content` and committed the result.
 
 ## How the content build works
 
