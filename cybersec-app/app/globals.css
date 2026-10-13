@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #020608;
+  --color-surface: #050d12;
+  --color-line: #0d2a35;
+  --color-cyan: #00e5ff;
+  --color-green: #00ff9d;
+  --color-red: #ff2d55;
+  --color-amber: #ffd24a;
+  --color-ink: #b4d0de;
+  --color-muted: #7fa3b3;
+  --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+@layer base {
+  html { background: var(--color-bg); scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  body { min-height: 100vh; }
+  :focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 2px; border-radius: 4px; }
+  ::selection { background: rgb(0 229 255 / 0.3); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+}
+
+@layer components {
+  .prose-guide { line-height: 1.75; font-size: 0.9375rem; }
+  .prose-guide > * + * { margin-top: 1rem; }
+  .prose-guide h2 { margin-top: 2.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-line); color: #e6f6fc; font-size: 1.25rem; font-weight: 700; }
+  .prose-guide h3 { margin-top: 1.75rem; color: var(--color-cyan); font-size: 1.0625rem; font-weight: 700; }
+  .prose-guide h4 { margin-top: 1.25rem; color: #e6f6fc; font-weight: 700; }
+  .prose-guide a { color: var(--color-cyan); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgb(0 229 255 / 0.4); }
+  .prose-guide a:hover { text-decoration-color: var(--color-cyan); }
+  .prose-guide ul, .prose-guide ol { padding-left: 1.5rem; }
+  .prose-guide ul { list-style: square; }
+  .prose-guide ol { list-style: decimal; }
+  .prose-guide li + li { margin-top: 0.375rem; }
+  .prose-guide li::marker { color: var(--color-muted); }
+  .prose-guide strong { color: #e6f6fc; }
+  .prose-guide blockquote { border-left: 3px solid var(--color-cyan); background: var(--color-surface); padding: 0.75rem 1rem; color: var(--color-muted); border-radius: 0 6px 6px 0; }
+  .prose-guide hr { border-color: var(--color-line); }
+  .prose-guide code { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 4px; padding: 0.1rem 0.35rem; font-size: 0.85em; color: var(--color-green); }
+  .prose-guide pre { position: relative; overflow-x: auto; background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 6px; padding: 1rem; font-size: 0.8125rem; line-height: 1.6; }
+  .prose-guide pre::before { content: attr(data-language); position: absolute; top: 0.375rem; right: 0.75rem; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-muted); }
+  .prose-guide pre code { background: none; border: 0; padding: 0; color: var(--color-ink); font-size: inherit; }
+  .prose-guide .table-wrap { overflow-x: auto; border: 1px solid var(--color-line); border-radius: 6px; }
+  .prose-guide table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .prose-guide th { background: var(--color-surface); color: #e6f6fc; text-align: left; }
+  .prose-guide th, .prose-guide td { padding: 0.625rem 0.875rem; border-bottom: 1px solid var(--color-line); vertical-align: top; }
+  .prose-guide tr:last-child td { border-bottom: 0; }
+  .prose-guide img { max-width: 100%; height: auto; display: inline-block; }
+  .prose-guide .missing-link { color: var(--color-muted); }
+
+  .code-view pre { margin: 0; overflow-x: auto; padding: 1rem 0; font-size: 0.8125rem; line-height: 1.65; counter-reset: line; }
+  .code-view code { display: block; min-width: max-content; }
+  .code-view .line { display: block; padding: 0 1rem 0 0; }
+  .code-view .line::before { counter-increment: line; content: counter(line); display: inline-block; width: 3.5rem; padding-right: 1rem; text-align: right; color: #3f6575; user-select: none; }
+
+  .hljs { color: var(--color-ink); }
+  .hljs-comment, .hljs-quote { color: #5d8797; font-style: italic; }
+  .hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-literal { color: var(--color-cyan); }
+  .hljs-string, .hljs-doctag, .hljs-regexp { color: var(--color-green); }
+  .hljs-number, .hljs-symbol, .hljs-bullet, .hljs-attr { color: var(--color-amber); }
+  .hljs-title, .hljs-section, .hljs-function .hljs-title, .hljs-class .hljs-title { color: #e6f6fc; font-weight: 600; }
+  .hljs-meta, .hljs-variable, .hljs-params { color: #9fd3e8; }
+  .hljs-deletion { color: var(--color-red); }
+}
