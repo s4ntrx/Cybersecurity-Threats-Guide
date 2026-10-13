@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+.vercel/
+next-env.d.ts
+*.tsbuildinfo
+.env*.local
+# generated at build time from the repository (content/knowledge.json is committed on purpose)
+public/search-index.json
