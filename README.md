@@ -3,12 +3,12 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
-
 <a href="https://paystack.shop/pay/bxg5kd2ghg">
   <img src="https://img.shields.io/badge/%E2%9D%A4%20Support%20my%20work-Paystack-00C3A0?style=flat&labelColor=202B2A"
        alt="Support my work via Paystack"
        height="28"
        style="border-radius: 18px;">
+       
 
 An educational guide to understanding, detecting, and preventing common cybersecurity threats. Each topic pairs documentation with Python detection scripts and prevention examples.
 
