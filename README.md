@@ -411,3 +411,9 @@ MIT. See [LICENSE](LICENSE).
 - Follow responsible disclosure practices
 - The author is not responsible for misuse of this material
 - Some scripts may trigger security alerts, so use them only in controlled environments
+
+## 💚 Support My Open-Source Work
+
+If my projects help you, consider supporting my work. Your contribution helps me maintain existing projects and build more tools for the developer community.
+
+[![Support my open-source work](https://img.shields.io/badge/Support%20my%20open--source%20work-Paystack-00C3A0?style=for-the-badge&logo=paystack&logoColor=white)](https://paystack.shop/pay/bxg5kd2ghg)
