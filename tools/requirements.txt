@@ -14,7 +14,7 @@ packaging>=23.2
 scapy>=2.5.0   # 2.5+ required: the DNS detector reads records as lists
 dnspython>=2.4.0
 pyshark>=0.6          # also needs the tshark binary (Wireshark)
-redis>=5.0.0           # rate_limiting.py also needs a running Redis server
+redis>=8.1.0           # rate_limiting.py also needs a running Redis server
 
 # Malware analysis
 pefile>=2023.2.7
