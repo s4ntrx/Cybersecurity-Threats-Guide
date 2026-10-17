@@ -19,7 +19,7 @@ redis>=5.0.0           # rate_limiting.py also needs a running Redis server
 # Malware analysis
 pefile>=2023.2.7
 watchdog>=3.0.0
-schedule>=1.2.0
+schedule>=1.2.2
 
 # Cryptography
 cryptography>=41.0.5
