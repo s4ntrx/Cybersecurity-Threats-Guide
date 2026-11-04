@@ -29,7 +29,7 @@ argon2-cffi>=23.1.0
 # Social engineering
 phonenumbers>=8.13.0
 python-whois>=0.9.4
-tldextract>=5.1.0
+tldextract>=5.4.0
 
 # SQL injection examples (imported at module level by parameterized_queries.py)
 psycopg2-binary>=2.9.9
