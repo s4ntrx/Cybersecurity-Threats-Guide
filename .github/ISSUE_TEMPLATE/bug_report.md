@@ -1,7 +1,10 @@
 ---
 name: Bug report
 about: A script fails, gives wrong output, or documentation is incorrect
+title: ''
 labels: bug
+assignees: ''
+
 ---
 
 **Location** (file path or README section):

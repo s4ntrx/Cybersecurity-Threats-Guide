@@ -1,7 +1,10 @@
 ---
 name: Feature request
 about: Propose a new threat topic, detection, or prevention example
+title: ''
 labels: enhancement
+assignees: ''
+
 ---
 
 **Threat or topic:**
