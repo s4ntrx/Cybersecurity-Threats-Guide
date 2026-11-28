@@ -22,7 +22,7 @@
     "lucide-react": "^1.76.0",
     "marked": "^18.1.2",
     "minisearch": "^7.2.0",
-    "next": "^16.4.0",
+    "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
